@@ -52,12 +52,8 @@ class _LoginScreenState extends State<LoginScreen>
   // Handle login
   void _handleLogin() {
     if (_loginFormKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Logged in as admin'),
-          backgroundColor: Color(0xFF1E88E5),
-        ),
-      );
+      // Navigate to dashboard after successful login
+      Navigator.pushReplacementNamed(context, '/dashboard');
     }
   }
   
@@ -70,15 +66,20 @@ class _LoginScreenState extends State<LoginScreen>
           backgroundColor: Color(0xFF1E88E5),
         ),
       );
+      // Switch to login tab after successful registration
+      _tabController.animateTo(0);
     }
   }
   
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        constraints: const BoxConstraints(minWidth: 900),
-        child: Row(
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          bool isWide = constraints.maxWidth >= 900;
+          if (isWide) {
+            // Desktop/tablet: side-by-side layout
+            return Row(
           children: [
             // Left column - Login/Register forms
             Expanded(
@@ -130,11 +131,11 @@ class _LoginScreenState extends State<LoginScreen>
                         unselectedLabelColor: Colors.grey[600],
                         indicatorColor: const Color(0xFF1E88E5),
                         indicatorWeight: 2,
-                        labelStyle: const TextStyle(
+                        labelStyle: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 16,
                         ),
-                        unselectedLabelStyle: const TextStyle(
+                        unselectedLabelStyle: TextStyle(
                           fontWeight: FontWeight.normal,
                           fontSize: 16,
                         ),
@@ -159,7 +160,6 @@ class _LoginScreenState extends State<LoginScreen>
                 ),
               ),
             ),
-            
             // Right column - Marketing panel
             Expanded(
               flex: 1,
@@ -169,8 +169,8 @@ class _LoginScreenState extends State<LoginScreen>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color(0xFF1E88E5),
-                      Color(0xFF1565C0),
+                      Color(0xFF4F8DFD), // lighter blue
+                      Color(0xFF2563EB), // deeper blue
                     ],
                   ),
                 ),
@@ -219,10 +219,155 @@ class _LoginScreenState extends State<LoginScreen>
                     ),
                   ],
                 ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            // Mobile: stacked layout
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  // Login/Register forms
+                  Container(
+                    color: Colors.grey[50],
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Company name and tagline
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Galit Digital',
+                              style: TextStyle(
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[800],
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Job Order Management System',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                        
+                        const SizedBox(height: 40),
+                        
+                        // Tab switcher
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.grey[300]!),
+                          ),
+                          child: TabBar(
+                            controller: _tabController,
+                            tabs: const [
+                              Tab(text: 'Login'),
+                              Tab(text: 'Register'),
+                            ],
+                            labelColor: Colors.grey[800],
+                            unselectedLabelColor: Colors.grey[600],
+                            indicatorColor: const Color(0xFF1E88E5),
+                            indicatorWeight: 2,
+                            labelStyle: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16,
+                            ),
+                            unselectedLabelStyle: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 30),
+                        
+                        // Form content
+                        Expanded(
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              // Login form
+                              _buildLoginForm(),
+                              // Register form
+                              _buildRegisterForm(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Marketing panel
+                  Container(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Color(0xFF4F8DFD), // lighter blue
+                          Color(0xFF2563EB), // deeper blue
+                        ],
+                      ),
+                    ),
+                    padding: const EdgeInsets.all(24),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Marketing headline
+                        Text(
+                          'Galit Digital Printing Services',
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Streamline your printing business with our comprehensive job order management system. Track orders, manage inventory, and process payments efficiently.',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white.withOpacity(0.9),
+                            height: 1.5,
+                          ),
+                        ),
+                        
+                        const SizedBox(height: 50),
+                        
+                        // Feature tiles
+                        _buildFeatureTile(
+                          icon: Icons.assignment_turned_in,
+                          title: 'Efficient Order Management',
+                          subtitle: 'Track and manage all your printing orders in one place',
+                        ),
+                        const SizedBox(height: 24),
+                        _buildFeatureTile(
+                          icon: Icons.inventory_2,
+                          title: 'Smart Inventory Control',
+                          subtitle: 'Keep track of your materials and get low stock alerts',
+                        ),
+                        const SizedBox(height: 24),
+                        _buildFeatureTile(
+                          icon: Icons.admin_panel_settings,
+                          title: 'Role-Based Access',
+                          subtitle: 'Secure access for admin and clerk with appropriate permissions',
+                        ),
+                      ],
               ),
             ),
           ],
         ),
+            );
+          }
+        },
       ),
     );
   }
@@ -269,6 +414,7 @@ class _LoginScreenState extends State<LoginScreen>
               controller: _loginUsernameController,
               decoration: InputDecoration(
                 hintText: 'Enter your username',
+                hintStyle: TextStyle(),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(color: Colors.grey[300]!),
@@ -284,7 +430,7 @@ class _LoginScreenState extends State<LoginScreen>
                 filled: true,
                 fillColor: Colors.white,
               ),
-              style: const TextStyle(),
+              style: TextStyle(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Username is required';
@@ -310,6 +456,7 @@ class _LoginScreenState extends State<LoginScreen>
               obscureText: true,
               decoration: InputDecoration(
                 hintText: 'Enter your password',
+                hintStyle: TextStyle(),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(color: Colors.grey[300]!),
@@ -325,7 +472,7 @@ class _LoginScreenState extends State<LoginScreen>
                 filled: true,
                 fillColor: Colors.white,
               ),
-              style: const TextStyle(),
+              style: TextStyle(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Password is required';
@@ -437,6 +584,7 @@ class _LoginScreenState extends State<LoginScreen>
               controller: _registerFullNameController,
               decoration: InputDecoration(
                 hintText: 'John Doe',
+                hintStyle: TextStyle(),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(color: Colors.grey[300]!),
@@ -452,7 +600,7 @@ class _LoginScreenState extends State<LoginScreen>
                 filled: true,
                 fillColor: Colors.white,
               ),
-              style: const TextStyle(),
+              style: TextStyle(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Full name is required';
@@ -477,6 +625,7 @@ class _LoginScreenState extends State<LoginScreen>
               controller: _registerEmailController,
               decoration: InputDecoration(
                 hintText: 'john@example.com',
+                hintStyle: TextStyle(),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(color: Colors.grey[300]!),
@@ -492,7 +641,7 @@ class _LoginScreenState extends State<LoginScreen>
                 filled: true,
                 fillColor: Colors.white,
               ),
-              style: const TextStyle(),
+              style: TextStyle(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Email is required';
@@ -520,6 +669,7 @@ class _LoginScreenState extends State<LoginScreen>
               controller: _registerUsernameController,
               decoration: InputDecoration(
                 hintText: 'johnDoe',
+                hintStyle: TextStyle(),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(color: Colors.grey[300]!),
@@ -535,7 +685,7 @@ class _LoginScreenState extends State<LoginScreen>
                 filled: true,
                 fillColor: Colors.white,
               ),
-              style: const TextStyle(),
+              style: TextStyle(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Username is required';
@@ -561,6 +711,7 @@ class _LoginScreenState extends State<LoginScreen>
               obscureText: true,
               decoration: InputDecoration(
                 hintText: '••••••••',
+                hintStyle: TextStyle(),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(color: Colors.grey[300]!),
@@ -576,10 +727,13 @@ class _LoginScreenState extends State<LoginScreen>
                 filled: true,
                 fillColor: Colors.white,
               ),
-              style: const TextStyle(),
+              style: TextStyle(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Password is required';
+                }
+                if (value.length < 6) {
+                  return 'Password must be at least 6 characters';
                 }
                 return null;
               },
@@ -606,6 +760,36 @@ class _LoginScreenState extends State<LoginScreen>
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 20),
+            
+            // Login link
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  _tabController.animateTo(0);
+                },
+                child: RichText(
+                  text: TextSpan(
+                    text: "Already have an account? ",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey[600],
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'Login',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: const Color(0xFF1E88E5),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
