@@ -26,7 +26,7 @@ class _RevenueTrendState extends State<RevenueTrend> {
     int pageCount = (months.length / 4).ceil();
     final isMobile = MediaQuery.of(context).size.width < 600;
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 16),
+      margin: EdgeInsets.symmetric(vertical: 16, horizontal: MediaQuery.of(context).size.width < 600 ? 6 : 0),
       color: Colors.white,
       elevation: 0,
       shape: RoundedRectangleBorder(

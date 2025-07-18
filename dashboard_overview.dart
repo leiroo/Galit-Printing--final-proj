@@ -50,24 +50,26 @@ class DashboardOverview extends StatelessWidget {
         isMobile: isMobile,
       ),
     ];
-    if (isMobile) {
-      return GridView.count(
-        crossAxisCount: 2,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 16,
-        childAspectRatio: 0.85,
-        children: cards.map((c) => AspectRatio(aspectRatio: 0.85, child: c)).toList(),
-      );
-    } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: cards
-            .map((c) => Expanded(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: c)))
-            .toList(),
-      );
-    }
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 6 : 16, vertical: isMobile ? 8 : 16),
+        child: isMobile
+            ? Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: cards.map((c) => SizedBox(
+                  width: (MediaQuery.of(context).size.width / 2) - 16,
+                  child: c,
+                )).toList(),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: cards
+                    .map((c) => Expanded(child: Padding(padding: const EdgeInsets.symmetric(horizontal: 12), child: c)))
+                    .toList(),
+              ),
+      ),
+    );
   }
 
   Widget _buildCard({
@@ -85,7 +87,7 @@ class DashboardOverview extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeInOut,
-        margin: const EdgeInsets.symmetric(vertical: 4),
+        margin: EdgeInsets.symmetric(vertical: isMobile ? 6 : 12, horizontal: isMobile ? 2 : 8),
         child: Card(
           elevation: 0,
           color: Colors.white,
@@ -106,32 +108,41 @@ class DashboardOverview extends StatelessWidget {
                     color: Colors.grey[600],
                     fontSize: 15,
                     letterSpacing: 0.1,
-                    // fontFamily: GoogleFonts.inter().fontFamily, // Uncomment if using google_fonts
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 6),
-                // Value and Icon
+                // Value and Icon Row
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      value,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black,
-                        height: 1.1,
-                        // fontFamily: GoogleFonts.inter().fontFamily,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4.0),
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                          height: 1.1,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Spacer(),
-                    Icon(icon, color: Colors.black87, size: 28, semanticLabel: semanticLabel),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 4.0),
+                      child: Icon(icon, color: Colors.black87, size: 28, semanticLabel: semanticLabel),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 14),
-                // Subtitle with status icon
-                if (!isMobile)
-                  Row(
+                // Centered subtitle/status
+                Center(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Icon(statusIcon, color: statusColor, size: 16, semanticLabel: subtitle),
@@ -143,36 +154,14 @@ class DashboardOverview extends StatelessWidget {
                             color: statusColor,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
-                            // fontFamily: GoogleFonts.inter().fontFamily,
                           ),
-                          overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.visible,
+                          maxLines: 2,
                         ),
                       ),
                     ],
                   ),
-                if (isMobile)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(statusIcon, color: statusColor, size: 16, semanticLabel: subtitle),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            subtitle,
-                            style: TextStyle(
-                              color: statusColor,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.visible,
-                            maxLines: 2,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                ),
               ],
             ),
           ),

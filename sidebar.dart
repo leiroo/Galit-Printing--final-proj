@@ -217,17 +217,17 @@ class _SidebarItem extends StatelessWidget {
         title: collapsed
             ? null
             : Text(
-                label,
-                style: TextStyle(
-                  fontWeight: active ? FontWeight.bold : FontWeight.normal,
+        label,
+        style: TextStyle(
+          fontWeight: active ? FontWeight.bold : FontWeight.normal,
                   color: active ? const Color(0xFF2563EB) : Colors.grey[800],
                   fontSize: 16,
                   // fontFamily: GoogleFonts.inter().fontFamily, // Uncomment if using google_fonts
-                ),
-              ),
-        onTap: onTap,
-        contentPadding: EdgeInsets.symmetric(horizontal: collapsed ? 16.0 : 24.0),
-        minLeadingWidth: 0,
+        ),
+      ),
+      onTap: onTap,
+      contentPadding: EdgeInsets.symmetric(horizontal: collapsed ? 16.0 : 24.0),
+      minLeadingWidth: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

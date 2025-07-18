@@ -11,6 +11,7 @@ import 'monthly_sales_chart.dart';
 import 'revenue_trends_chart.dart';
 import 'service_breakdown_chart.dart';
 import 'app_data.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class JobOrdersPage extends StatelessWidget {
   const JobOrdersPage({super.key});
@@ -21,7 +22,7 @@ class JobOrdersPage extends StatelessWidget {
       'id': o.id,
       'customer': o.customer,
       'service': o.service,
-      'date': "${o.date.toLocal().toString().split(' ')[0]}",
+      'date': o.date.toLocal().toString().split(' ')[0],
       'status': o.status,
       'price': '₱${o.price.toStringAsFixed(0)}',
       'createdBy': o.createdBy,
@@ -49,7 +50,7 @@ class JobOrdersPage extends StatelessWidget {
           if (!isMobile) const Sidebar(),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(32),
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 6 : 32, vertical: 32),
               child: JobOrdersTable(orders: orders),
             ),
           ),
@@ -135,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 if (!isMobile) const Sidebar(),
                 Expanded(
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(32),
+                    padding: EdgeInsets.symmetric(horizontal: isMobile ? 6 : 32, vertical: 32),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -203,7 +204,7 @@ class AnalyticsPage extends StatelessWidget {
           if (!isMobile) const Sidebar(),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(32),
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 6 : 32, vertical: 32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
@@ -229,7 +230,7 @@ class PaymentsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isMobile = MediaQuery.of(context).size.width < 600;
+    final isMobile = MediaQuery.of(context).size.width < 900;
     final payments = [
       {
         'receipt': 'REC-000001',
@@ -282,297 +283,231 @@ class PaymentsPage extends StatelessWidget {
         titleTextStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
       ),
       drawer: isMobile ? const Drawer(child: Sidebar()) : null,
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!isMobile) const Sidebar(),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(32),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text('Payment Management', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28)),
-                      ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.add, size: 20),
-                        label: const Text('Record Payment', style: TextStyle(fontWeight: FontWeight.bold)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF2563EB),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          elevation: 2,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 6 : 32, vertical: 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Payment Management', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28)),
+                ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.add, size: 20),
+                  label: const Text('Record Payment', style: TextStyle(fontWeight: FontWeight.bold)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF2563EB),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    elevation: 2,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+            Card(
+              color: const Color(0xFFF8FAFC),
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        decoration: InputDecoration(
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: 'Search by receipt ID or order ID',
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 24),
-                  Card(
-                    color: const Color(0xFFF8FAFC),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.search),
-                                hintText: 'Search by receipt ID or order ID',
-                                filled: true,
-                                fillColor: Colors.white,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Color(0xFF2563EB)),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          SizedBox(
-                            width: 180,
-                            child: DropdownButtonFormField<String>(
-                              value: 'All Statuses',
-                              items: const [
-                                DropdownMenuItem(value: 'All Statuses', child: Text('All Statuses')),
-                                DropdownMenuItem(value: 'Completed', child: Text('Completed')),
-                                DropdownMenuItem(value: 'Partial', child: Text('Partial')),
-                                DropdownMenuItem(value: 'Refunded', child: Text('Refunded')),
-                              ],
-                              onChanged: (v) {},
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Color(0xFF2563EB)),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          SizedBox(
-                            width: 140,
-                            child: DropdownButtonFormField<String>(
-                              value: 'All Time',
-                              items: const [
-                                DropdownMenuItem(value: 'All Time', child: Text('All Time')),
-                                DropdownMenuItem(value: 'Today', child: Text('Today')),
-                                DropdownMenuItem(value: 'This Week', child: Text('This Week')),
-                                DropdownMenuItem(value: 'This Month', child: Text('This Month')),
-                              ],
-                              onChanged: (v) {},
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Color(0xFF2563EB)),
-                                ),
-                              ),
-                            ),
-                          ),
+                    ),
+                    const SizedBox(width: 16),
+                    SizedBox(
+                      width: 180,
+                      child: DropdownButtonFormField<String>(
+                        value: 'All Statuses',
+                        items: const [
+                          DropdownMenuItem(value: 'All Statuses', child: Text('All Statuses')),
+                          DropdownMenuItem(value: 'Completed', child: Text('Completed')),
+                          DropdownMenuItem(value: 'Partial', child: Text('Partial')),
+                          DropdownMenuItem(value: 'Refunded', child: Text('Refunded')),
                         ],
+                        onChanged: (v) {},
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  Card(
-                    elevation: 0,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(24.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Payment Transactions', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
-                          const SizedBox(height: 8),
-                          const Text('View and manage all payment records', style: TextStyle(color: Colors.grey)),
-                          const SizedBox(height: 16),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: DataTable(
-                              columns: const [
-                                DataColumn(label: Text('Receipt #')),
-                                DataColumn(label: Text('Order ID')),
-                                DataColumn(label: Text('Date')),
-                                DataColumn(label: Text('Amount')),
-                                DataColumn(label: Text('Method')),
-                                DataColumn(label: Text('Status')),
-                                DataColumn(label: Text('Received By')),
-                                DataColumn(label: Text('Actions')),
-                              ],
-                              rows: payments.map((p) {
-                                Color statusColor;
-                                String status = p['status']!;
-                                switch (status) {
-                                  case 'Completed':
-                                    statusColor = const Color(0xFF4ADE80); // green
-                                    break;
-                                  case 'Partial':
-                                    statusColor = const Color(0xFFFACC15); // yellow
-                                    break;
-                                  case 'Refunded':
-                                    statusColor = const Color(0xFFF87171); // red
-                                    break;
-                                  default:
-                                    statusColor = Colors.grey;
-                                }
-                                return DataRow(cells: [
-                                  DataCell(Text(p['receipt']!)),
-                                  DataCell(Text(p['order']!)),
-                                  DataCell(Text(p['date']!)),
-                                  DataCell(Text(p['amount']!, style: const TextStyle(fontWeight: FontWeight.bold))),
-                                  DataCell(Text(p['method']!)),
-                                  DataCell(Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: statusColor.withOpacity(0.15),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(status, style: TextStyle(color: statusColor, fontWeight: FontWeight.w500)),
-                                  )),
-                                  DataCell(Text(p['receivedBy']!)),
-                                  DataCell(Row(
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(Icons.receipt_long, color: Color(0xFF2563EB)),
-                                        tooltip: 'View Receipt',
-                                        onPressed: () {},
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(Icons.link, color: Colors.black54),
-                                        tooltip: 'Copy Link',
-                                        onPressed: () {},
-                                      ),
-                                    ],
-                                  )),
-                                ]);
-                              }).toList(),
-                            ),
-                          ),
+                    const SizedBox(width: 16),
+                    SizedBox(
+                      width: 140,
+                      child: DropdownButtonFormField<String>(
+                        value: 'All Time',
+                        items: const [
+                          DropdownMenuItem(value: 'All Time', child: Text('All Time')),
+                          DropdownMenuItem(value: 'Today', child: Text('Today')),
+                          DropdownMenuItem(value: 'This Week', child: Text('This Week')),
+                          DropdownMenuItem(value: 'This Month', child: Text('This Month')),
                         ],
+                        onChanged: (v) {},
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 32),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Payment Summary Card
-                      Expanded(
-                        flex: 1,
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: const [
-                                    Icon(Icons.calendar_today_outlined, size: 24),
-                                    SizedBox(width: 8),
-                                    Text('Payment Summary', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                                  ],
-                                ),
-                                const SizedBox(height: 24),
-                                _summaryRow('Today\'s Revenue', '₱12,500.00', bold: true),
-                                const SizedBox(height: 8),
-                                _summaryRow('This Week', '₱58,750.00'),
-                                const SizedBox(height: 8),
-                                _summaryRow('This Month', '₱245,320.00'),
-                                const Divider(height: 32),
-                                _summaryRow('Pending Payments', '₱35,200.00', color: Color(0xFFF59E42)),
-                                const SizedBox(height: 8),
-                                _summaryRow('Completed Payments', '₱210,120.00', color: Color(0xFF22C55E)),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 24),
-                      // Payment Methods Card
-                      Expanded(
-                        flex: 1,
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(24.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: const [
-                                    Icon(Icons.credit_card, size: 24, color: Colors.black87),
-                                    SizedBox(width: 8),
-                                    Text('Payment Methods', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87)),
-                                  ],
-                                ),
-                                const SizedBox(height: 24),
-                                _methodRow(Icons.attach_money, 'Cash', '₱150,200.00', '65% of total', Colors.green, 0.65),
-                                const SizedBox(height: 16),
-                                _methodRow(Icons.account_balance_wallet, 'GCash', '₱58,500.00', '25% of total', Colors.blue, 0.25),
-                                const SizedBox(height: 16),
-                                _methodRow(Icons.credit_card, 'Other Methods', '₱23,400.00', '10% of total', Colors.purple, 0.10),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 24),
+            Card(
+              elevation: 0,
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Payment Transactions', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                    const SizedBox(height: 8),
+                    const Text('View and manage all payment records', style: TextStyle(color: Colors.grey)),
+                    const SizedBox(height: 16),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        columns: const [
+                          DataColumn(label: Text('Receipt #')),
+                          DataColumn(label: Text('Order ID')),
+                          DataColumn(label: Text('Date')),
+                          DataColumn(label: Text('Amount')),
+                          DataColumn(label: Text('Method')),
+                          DataColumn(label: Text('Status')),
+                          DataColumn(label: Text('Received By')),
+                          DataColumn(label: Text('Actions')),
+                        ],
+                        rows: payments.map((p) {
+                          Color statusColor;
+                          String status = p['status']!;
+                          switch (status) {
+                            case 'Completed':
+                              statusColor = const Color(0xFF4ADE80); // green
+                              break;
+                            case 'Partial':
+                              statusColor = const Color(0xFFFACC15); // yellow
+                              break;
+                            case 'Refunded':
+                              statusColor = const Color(0xFFF87171); // red
+                              break;
+                            default:
+                              statusColor = Colors.grey;
+                          }
+                          return DataRow(cells: [
+                            DataCell(Text(p['receipt']!)),
+                            DataCell(Text(p['order']!)),
+                            DataCell(Text(p['date']!)),
+                            DataCell(Text(p['amount']!, style: const TextStyle(fontWeight: FontWeight.bold))),
+                            DataCell(Text(p['method']!)),
+                            DataCell(Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: statusColor.withOpacity(0.15),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(status, style: TextStyle(color: statusColor, fontWeight: FontWeight.w500)),
+                            )),
+                            DataCell(Text(p['receivedBy']!)),
+                            DataCell(Row(
+                              children: [
+                                IconButton(
+                                  icon: const Icon(Icons.receipt_long, color: Color(0xFF2563EB)),
+                                  tooltip: 'View Receipt',
+                                  onPressed: () {},
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.link, color: Colors.black54),
+                                  tooltip: 'Copy Link',
+                                  onPressed: () {},
+                                ),
+                              ],
+                            )),
+                          ]);
+                        }).toList(),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            isMobile
+                ? Column(
+                    children: [
+                      // Payment Summary first, then Payment Methods
+                      _paymentSummaryCard(),
+                      const SizedBox(height: 24),
+                      _paymentMethodsCard(),
+                    ],
+                  )
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Payment Summary left, Payment Methods right
+                      Expanded(flex: 1, child: _paymentSummaryCard()),
+                      const SizedBox(width: 24),
+                      Expanded(flex: 1, child: _paymentMethodsCard()),
+                    ],
+                  ),
+          ],
+        ),
       ),
     );
   }
@@ -621,6 +556,67 @@ Widget _methodRow(IconData icon, String label, String amount, String percent, Co
   );
 }
 
+Widget _paymentSummaryCard() {
+  return Card(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    child: Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Icon(Icons.calendar_today_outlined, size: 24),
+              SizedBox(width: 8),
+              Text('Payment Summary', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            ],
+          ),
+          const SizedBox(height: 24),
+          _summaryRow('Today\'s Revenue', '₱12,500.00', bold: true),
+          const SizedBox(height: 8),
+          _summaryRow('This Week', '₱58,750.00'),
+          const SizedBox(height: 8),
+          _summaryRow('This Month', '₱245,320.00'),
+          const Divider(height: 32),
+          _summaryRow('Pending Payments', '₱35,200.00', color: Color(0xFFF59E42)),
+          const SizedBox(height: 8),
+          _summaryRow('Completed Payments', '₱210,120.00', color: Color(0xFF22C55E)),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _paymentMethodsCard() {
+  return Card(
+    color: Colors.white,
+    elevation: 0,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(12),
+      side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: const [
+              Icon(Icons.credit_card, size: 24, color: Colors.black87),
+              SizedBox(width: 8),
+              Text('Payment Methods', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87)),
+            ],
+          ),
+          const SizedBox(height: 24),
+          _methodRow(Icons.attach_money, 'Cash', '₱150,200.00', '65% of total', Colors.green, 0.65),
+          const SizedBox(height: 16),
+          _methodRow(Icons.account_balance_wallet, 'GCash', '₱58,500.00', '25% of total', Colors.blue, 0.25),
+        ],
+      ),
+    ),
+  );
+}
+
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
 
@@ -656,7 +652,7 @@ class SettingsPage extends StatelessWidget {
           if (!isMobile) const Sidebar(),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(32),
+              padding: EdgeInsets.symmetric(horizontal: isMobile ? 6 : 32, vertical: 32),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -872,46 +868,122 @@ class ReportsPage extends StatelessWidget {
         titleTextStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
       ),
       drawer: isMobile ? const Drawer(child: Sidebar()) : null,
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!isMobile) const Sidebar(),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(32),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Sales & Profit Report', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28)),
-                  const SizedBox(height: 24),
-                  Row(
-                    children: [
-                      _reportCard('Total Sales', '₱${totalSales.toStringAsFixed(2)}', Icons.attach_money, Colors.blue),
-                      const SizedBox(width: 24),
-                      _reportCard('Total Profit', '₱${totalProfit.toStringAsFixed(2)}', Icons.trending_up, Colors.green),
-                    ],
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 6 : 32, vertical: 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Admin Reports Dashboard', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28)),
+            const SizedBox(height: 4),
+            const Text('Visible to: System Administrator only', style: TextStyle(color: Colors.red, fontSize: 14)),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                _reportCard('Total Sales', '₱${totalSales.toStringAsFixed(2)}', Icons.attach_money, Colors.blue),
+                const SizedBox(width: 24),
+                _reportCard('Total Profit', '₱${totalProfit.toStringAsFixed(2)}', Icons.trending_up, Colors.green),
+              ],
+            ),
+            const SizedBox(height: 32),
+            const Text('Sales by Service', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            const SizedBox(height: 12),
+            Container(
+              height: 220,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Color(0xFFE5E7EB)),
+              ),
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: (salesByService.values.isNotEmpty ? salesByService.values.reduce((a, b) => a > b ? a : b) : 0) + 1000,
+                  barTouchData: BarTouchData(enabled: true),
+                  titlesData: FlTitlesData(
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(showTitles: true, reservedSize: 40),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          final keys = salesByService.keys.toList();
+                          if (value.toInt() >= 0 && value.toInt() < keys.length) {
+                            return Text(keys[value.toInt()], style: const TextStyle(fontSize: 12));
+                          }
+                          return const SizedBox.shrink();
+                        },
+                        interval: 1,
+                      ),
+                    ),
+                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   ),
-                  const SizedBox(height: 32),
-                  const Text('Sales by Service', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  const SizedBox(height: 12),
-                  ...salesByService.entries.map((e) => ListTile(
-                    leading: const Icon(Icons.local_offer, color: Colors.indigo),
-                    title: Text(e.key),
-                    trailing: Text('₱${e.value.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                  )),
-                  const SizedBox(height: 32),
-                  const Text('Sales by Customer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                  const SizedBox(height: 12),
-                  ...salesByCustomer.entries.map((e) => ListTile(
-                    leading: const Icon(Icons.person, color: Colors.deepPurple),
-                    title: Text(e.key),
-                    trailing: Text('₱${e.value.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                  )),
-                ],
+                  borderData: FlBorderData(show: false),
+                  barGroups: [
+                    for (int i = 0; i < salesByService.length; i++)
+                      BarChartGroupData(
+                        x: i,
+                        barRods: [
+                          BarChartRodData(
+                            toY: salesByService.values.elementAt(i),
+                            color: Colors.blueAccent,
+                            width: 24,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 32),
+            const Text('Sales by Customer', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            const SizedBox(height: 12),
+            Container(
+              height: 220,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Color(0xFFE5E7EB)),
+              ),
+              child: PieChart(
+                PieChartData(
+                  sections: [
+                    for (int i = 0; i < salesByCustomer.length; i++)
+                      PieChartSectionData(
+                        color: Colors.primaries[i % Colors.primaries.length].shade300,
+                        value: salesByCustomer.values.elementAt(i),
+                        title: salesByCustomer.keys.elementAt(i),
+                        radius: 60,
+                        titleStyle: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black87),
+                      ),
+                  ],
+                  sectionsSpace: 2,
+                  centerSpaceRadius: 0,
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            const Text('Sales by Service (Table)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            const SizedBox(height: 12),
+            ...salesByService.entries.map((e) => ListTile(
+              leading: const Icon(Icons.local_offer, color: Colors.indigo),
+              title: Text(e.key),
+              trailing: Text('₱${e.value.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            )),
+            const SizedBox(height: 32),
+            const Text('Sales by Customer (Table)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+            const SizedBox(height: 12),
+            ...salesByCustomer.entries.map((e) => ListTile(
+              leading: const Icon(Icons.person, color: Colors.deepPurple),
+              title: Text(e.key),
+              trailing: Text('₱${e.value.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
+            )),
+          ],
+        ),
       ),
     );
   }
@@ -1051,120 +1123,101 @@ class InventoryPage extends StatelessWidget {
         titleTextStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
       ),
       drawer: isMobile ? const Drawer(child: Sidebar()) : null,
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (!isMobile) const Sidebar(),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(32),
-              child: Card(
-                color: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Inventory Management', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
-                      const SizedBox(height: 24),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          headingRowColor: WidgetStateProperty.resolveWith<Color?>((states) => Colors.white),
-                          headingTextStyle: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 15),
-                          dataRowColor: WidgetStateProperty.resolveWith<Color?>((states) {
-                            if (states.contains(WidgetState.hovered)) {
-                              return const Color(0xFFF1F5F9);
-                            }
-                            return Colors.white;
-                          }),
-                          columnSpacing: 32,
-                          horizontalMargin: 24,
-                          dataRowMinHeight: 48,
-                          dataRowMaxHeight: 56,
-                          columns: const [
-                            DataColumn(label: Text('ID')),
-                            DataColumn(label: Text('Item Name')),
-                            DataColumn(label: Text('Current Stock')),
-                            DataColumn(label: Text('Unit')),
-                            DataColumn(label: Text('Reorder Level')),
-                            DataColumn(label: Text('Unit Cost')),
-                            DataColumn(label: Text('Lead Time')),
-                            DataColumn(label: Text('Status')),
-                            DataColumn(label: Text('Actions')),
-                          ],
-                          rows: inventory.map((item) {
-                            Color statusColor;
-                            String statusLabel;
-                            switch (item['status']) {
-                              case 'Low Stock':
-                                statusColor = Colors.orange;
-                                statusLabel = 'Low Stock';
-                                break;
-                              case 'Adequate':
-                              default:
-                                statusColor = Colors.green;
-                                statusLabel = 'Adequate';
-                                break;
-                            }
-                            return DataRow(cells: [
-                              DataCell(Text(item['id'].toString())),
-                              DataCell(Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(item['name'].toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
-                                  if (item['desc'].toString().isNotEmpty)
-                                    Text(item['desc'].toString(), style: const TextStyle(fontSize: 12, color: Colors.grey)),
-                                ],
-                              )),
-                              DataCell(Text(item['stock'].toString())),
-                              DataCell(Text(item['unit'].toString())),
-                              DataCell(Text(item['reorder'].toString())),
-                              DataCell(Text(item['cost'].toString())),
-                              DataCell(Text(item['lead'].toString())),
-                              DataCell(Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: statusColor.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(statusLabel, style: TextStyle(color: statusColor)),
-                              )),
-                              DataCell(Row(
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit, color: Color(0xFF6366F1)),
-                                    onPressed: () {},
-                                    tooltip: 'Edit',
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.add, color: Color(0xFF22C55E)),
-                                    onPressed: () {},
-                                    tooltip: 'Add Stock',
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.refresh, color: Color(0xFF64748B)),
-                                    onPressed: () {},
-                                    tooltip: 'Restock',
-                                  ),
-                                ],
-                              )),
-                            ]);
-                          }).toList(),
-                        ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: isMobile ? 6 : 32, vertical: 32),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Inventory Management', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
+            const SizedBox(height: 24),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: DataTable(
+                headingRowColor: WidgetStateProperty.resolveWith<Color?>((states) => Colors.white),
+                headingTextStyle: const TextStyle(fontWeight: FontWeight.bold, color: Colors.black87, fontSize: 15),
+                dataRowColor: WidgetStateProperty.resolveWith<Color?>((states) {
+                  if (states.contains(WidgetState.hovered)) {
+                    return const Color(0xFFF1F5F9);
+                  }
+                  return Colors.white;
+                }),
+                columnSpacing: 32,
+                horizontalMargin: 24,
+                dataRowMinHeight: 48,
+                dataRowMaxHeight: 56,
+                columns: const [
+                  DataColumn(label: Text('ID')),
+                  DataColumn(label: Text('Item Name')),
+                  DataColumn(label: Text('Current Stock')),
+                  DataColumn(label: Text('Unit')),
+                  DataColumn(label: Text('Reorder Level')),
+                  DataColumn(label: Text('Unit Cost')),
+                  DataColumn(label: Text('Lead Time')),
+                  DataColumn(label: Text('Status')),
+                  DataColumn(label: Text('Actions')),
+                ],
+                rows: inventory.map((item) {
+                  Color statusColor;
+                  String statusLabel;
+                  switch (item['status']) {
+                    case 'Low Stock':
+                      statusColor = Colors.orange;
+                      statusLabel = 'Low Stock';
+                      break;
+                    case 'Adequate':
+                    default:
+                      statusColor = Colors.green;
+                      statusLabel = 'Adequate';
+                      break;
+                  }
+                  return DataRow(cells: [
+                    DataCell(Text(item['id'].toString())),
+                    DataCell(Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(item['name'].toString(), style: const TextStyle(fontWeight: FontWeight.bold)),
+                        if (item['desc'].toString().isNotEmpty)
+                          Text(item['desc'].toString(), style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                      ],
+                    )),
+                    DataCell(Text(item['stock'].toString())),
+                    DataCell(Text(item['unit'].toString())),
+                    DataCell(Text(item['reorder'].toString())),
+                    DataCell(Text(item['cost'].toString())),
+                    DataCell(Text(item['lead'].toString())),
+                    DataCell(Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: statusColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                    ],
-                  ),
-                ),
+                      child: Text(statusLabel, style: TextStyle(color: statusColor)),
+                    )),
+                    DataCell(Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Color(0xFF6366F1)),
+                          onPressed: () {},
+                          tooltip: 'Edit',
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add, color: Color(0xFF22C55E)),
+                          onPressed: () {},
+                          tooltip: 'Add Stock',
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.refresh, color: Color(0xFF64748B)),
+                          onPressed: () {},
+                          tooltip: 'Restock',
+                        ),
+                      ],
+                    )),
+                  ]);
+                }).toList(),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
