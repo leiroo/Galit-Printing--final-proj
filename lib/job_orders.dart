@@ -27,7 +27,7 @@ class JobOrdersPage extends StatelessWidget {
               )
             : null,
         title: const Text('Job Orders'),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0,
         actions: [
           Padding(
@@ -35,8 +35,8 @@ class JobOrdersPage extends StatelessWidget {
             child: ProfileMenu(),
           ),
         ],
-        iconTheme: const IconThemeData(color: Colors.black),
-        titleTextStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
+        iconTheme: Theme.of(context).appBarTheme.iconTheme,
+        titleTextStyle: Theme.of(context).appBarTheme.titleTextStyle,
       ),
       drawer: isMobile ? const Drawer(child: Sidebar()) : null,
       body: Row(
@@ -109,6 +109,7 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
     final isTablet = screenWidth >= 600 && screenWidth < 1200;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     
     return SingleChildScrollView(
       child: Padding(
@@ -124,7 +125,7 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                 style: TextStyle(
                   fontWeight: FontWeight.w900,
                   fontSize: isMobile ? 24 : 32,
-                  color: Colors.black87,
+                  color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black87),
                 ),
               ),
             ),
@@ -133,7 +134,7 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
               child: Text(
                 'Manage and track all printing job orders with real-time status updates',
                 style: TextStyle(
-                  color: Colors.grey,
+                  color: isDark ? Colors.grey[400] : Colors.grey,
                   fontSize: isMobile ? 14 : 16,
                 ),
               ),
@@ -141,11 +142,14 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
             
             // Order Management Header Card
             Card(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               elevation: 0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+                side: BorderSide(
+                  color: isDark ? Colors.grey[800]! : const Color(0xFFE5E7EB), 
+                  width: 1
+                ),
               ),
               margin: EdgeInsets.only(bottom: 24, left: isMobile ? 8 : 16, right: isMobile ? 8 : 16),
               child: Padding(
@@ -161,7 +165,7 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold, 
                         fontSize: isMobile ? 18 : 24, 
-                        color: Colors.black87
+                        color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black87),
                       )
                     ),
                     const SizedBox(height: 16),
@@ -178,23 +182,39 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                             onChanged: (value) {
                               _filterOrders();
                             },
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                            ),
                             decoration: InputDecoration(
-                              prefixIcon: const Icon(Icons.search),
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: isDark ? Colors.grey[400] : Colors.grey[600],
+                              ),
                               hintText: 'Search by order ID or service type',
+                              hintStyle: TextStyle(
+                                color: isDark ? Colors.grey[400] : Colors.grey[600],
+                              ),
                               filled: true,
-                              fillColor: Color(0xFFF8FAFC),
+                              fillColor: isDark ? Colors.grey[800] : const Color(0xFFF8FAFC),
                               contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(color: Colors.grey[300]!),
+                                borderSide: BorderSide(
+                                  color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: BorderSide(color: Colors.grey[300]!),
+                                borderSide: BorderSide(
+                                  color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                borderSide: BorderSide(
+                                  color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                  width: 2,
+                                ),
                               ),
                             ),
                           ),
@@ -218,19 +238,26 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                                     },
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: Color(0xFFF8FAFC),
+                                      fillColor: isDark ? Colors.grey[800] : const Color(0xFFF8FAFC),
                                       contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                        ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                        ),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                          width: 2,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -248,23 +275,39 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                               onChanged: (value) {
                                 _filterOrders();
                               },
+                              style: TextStyle(
+                                color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                              ),
                               decoration: InputDecoration(
-                                prefixIcon: const Icon(Icons.search),
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                ),
                                 hintText: 'Search by order ID or service type',
+                                hintStyle: TextStyle(
+                                  color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                ),
                                 filled: true,
-                                fillColor: Color(0xFFF8FAFC),
+                                fillColor: isDark ? Colors.grey[800] : const Color(0xFFF8FAFC),
                                 contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
+                                  borderSide: BorderSide(
+                                    color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
+                                  borderSide: BorderSide(
+                                    color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                  borderSide: BorderSide(
+                                    color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                    width: 2,
+                                  ),
                                 ),
                               ),
                             ),
@@ -291,19 +334,26 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                               },
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: Color(0xFFF8FAFC),
+                                fillColor: isDark ? Colors.grey[800] : const Color(0xFFF8FAFC),
                                 contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
+                                  borderSide: BorderSide(
+                                    color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                  ),
                                 ),
                                 enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: BorderSide(color: Colors.grey[300]!),
+                                  borderSide: BorderSide(
+                                    color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                  ),
                                 ),
                                 focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
-                                  borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                  borderSide: BorderSide(
+                                    color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                    width: 2,
+                                  ),
                                 ),
                               ),
                             ),
@@ -318,11 +368,14 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
             
             // Job Orders Table Card
             Card(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               elevation: 1,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+                side: BorderSide(
+                  color: isDark ? Colors.grey[800]! : const Color(0xFFE5E7EB), 
+                  width: 1
+                ),
               ),
               margin: EdgeInsets.only(bottom: 24, left: isMobile ? 8 : 16, right: isMobile ? 8 : 16),
               child: Padding(
@@ -338,7 +391,7 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold, 
                         fontSize: isMobile ? 18 : 20, 
-                        color: Colors.black87
+                        color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black87),
                       )
                     ),
                     const SizedBox(height: 16),
@@ -351,29 +404,29 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                           minWidth: isMobile ? screenWidth - 48 : 800,
                         ),
                         child: DataTable(
-                          headingRowColor: WidgetStateProperty.resolveWith<Color?>((states) => Colors.white),
+                          headingRowColor: WidgetStateProperty.resolveWith<Color?>((states) => Theme.of(context).cardColor),
                           headingTextStyle: TextStyle(
                             fontWeight: FontWeight.bold, 
-                            color: Colors.black87, 
+                            color: Theme.of(context).textTheme.titleMedium?.color ?? (isDark ? Colors.white : Colors.black87), 
                             fontSize: isMobile ? 13 : 15
                           ),
                           dataRowColor: WidgetStateProperty.resolveWith<Color?>((states) {
                             if (states.contains(WidgetState.hovered)) {
-                              return const Color(0xFFF1F5F9);
+                              return isDark ? Colors.grey[700] : const Color(0xFFF1F5F9);
                             }
-                            return Colors.white;
+                            return Theme.of(context).cardColor;
                           }),
                           columnSpacing: isMobile ? 32 : 64,
                           horizontalMargin: isMobile ? 16 : 32,
                           dataRowMinHeight: isMobile ? 48 : 56,
                           dataRowMaxHeight: isMobile ? 56 : 64,
                           columns: [
-                            DataColumn(label: Text('Order ID', style: TextStyle(fontSize: isMobile ? 12 : 14))),
-                            DataColumn(label: Text('Customer Name', style: TextStyle(fontSize: isMobile ? 12 : 14))),
-                            DataColumn(label: Text('Service', style: TextStyle(fontSize: isMobile ? 12 : 14))),
-                            DataColumn(label: Text('Date', style: TextStyle(fontSize: isMobile ? 12 : 14))),
-                            DataColumn(label: Text('Status', style: TextStyle(fontSize: isMobile ? 12 : 14))),
-                            DataColumn(label: Text('Price', style: TextStyle(fontSize: isMobile ? 12 : 14))),
+                            DataColumn(label: Text('Order ID', style: TextStyle(fontSize: isMobile ? 12 : 14, color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87)))),
+                            DataColumn(label: Text('Customer Name', style: TextStyle(fontSize: isMobile ? 12 : 14, color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87)))),
+                            DataColumn(label: Text('Service', style: TextStyle(fontSize: isMobile ? 12 : 14, color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87)))),
+                            DataColumn(label: Text('Date', style: TextStyle(fontSize: isMobile ? 12 : 14, color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87)))),
+                            DataColumn(label: Text('Status', style: TextStyle(fontSize: isMobile ? 12 : 14, color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87)))),
+                            DataColumn(label: Text('Price', style: TextStyle(fontSize: isMobile ? 12 : 14, color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87)))),
                           ],
                           rows: _filteredOrders.map((order) {
                             Color statusColor;
@@ -400,22 +453,32 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                             return DataRow(cells: [
                               DataCell(Text(
                                 order['id'], 
-                                style: TextStyle(fontSize: isMobile ? 11 : 13)
+                                style: TextStyle(
+                                  fontSize: isMobile ? 11 : 13,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87),
+                                )
                               )),
                               DataCell(Text(
                                 order['customer'], 
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: isMobile ? 11 : 13
+                                  fontSize: isMobile ? 11 : 13,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87),
                                 )
                               )),
                               DataCell(Text(
                                 order['service'], 
-                                style: TextStyle(fontSize: isMobile ? 11 : 13)
+                                style: TextStyle(
+                                  fontSize: isMobile ? 11 : 13,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87),
+                                )
                               )),
                               DataCell(Text(
                                 order['date'], 
-                                style: TextStyle(fontSize: isMobile ? 11 : 13)
+                                style: TextStyle(
+                                  fontSize: isMobile ? 11 : 13,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87),
+                                )
                               )),
                               DataCell(Container(
                                 padding: EdgeInsets.symmetric(
@@ -438,7 +501,8 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                                 order['price'], 
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: isMobile ? 11 : 13
+                                  fontSize: isMobile ? 11 : 13,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87),
                                 )
                               )),
                             ]);
@@ -457,13 +521,20 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
   }
 
   Widget _buildStatCard(String title, String value, IconData icon, Color iconColor) {
-    return Card(
-      elevation: 0,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
-      ),
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        
+        return Card(
+          elevation: 0,
+          color: Theme.of(context).cardColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+            side: BorderSide(
+              color: isDark ? Colors.grey[800]! : const Color(0xFFE5E7EB), 
+              width: 1
+            ),
+          ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
         child: Column(
@@ -478,10 +549,10 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
                     padding: const EdgeInsets.only(left: 4.0),
                     child: Text(
                       value,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black),
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -498,8 +569,8 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
             Center(
               child: Text(
                 title,
-                style: const TextStyle(
-                  color: Colors.grey,
+                style: TextStyle(
+                  color: isDark ? Colors.grey[400] : Colors.grey,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
@@ -511,5 +582,7 @@ class _JobOrdersTableState extends State<JobOrdersTable> {
         ),
       ),
     );
-  }
+    }
+  );
+}
 } 

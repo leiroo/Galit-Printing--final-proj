@@ -562,10 +562,37 @@ class _InventoryPageState extends State<InventoryPage> {
                         TextField(
                           controller: _searchController,
                           onChanged: (value) => _filterInventory(),
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                          ),
                           decoration: InputDecoration(
                             hintText: 'Search by item name or description...',
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            hintStyle: TextStyle(
+                              color: isDark ? Colors.grey[400] : Colors.grey[600],
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              color: isDark ? Colors.grey[400] : Colors.grey[600],
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: BorderSide(
+                                color: isDark ? Colors.blue[400]! : Colors.blue[600]!,
+                                width: 2,
+                              ),
+                            ),
                             filled: true,
                             fillColor: isDark ? Colors.grey[800] : Colors.grey[50],
                             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -592,12 +619,39 @@ class _InventoryPageState extends State<InventoryPage> {
                           child: TextField(
                             controller: _searchController,
                             onChanged: (value) => _filterInventory(),
+                            style: TextStyle(
+                              color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                            ),
                             decoration: InputDecoration(
                               hintText: 'Search by item name or description...',
-                              prefixIcon: const Icon(Icons.search),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                              hintStyle: TextStyle(
+                                color: isDark ? Colors.grey[400] : Colors.grey[600],
+                              ),
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: isDark ? Colors.grey[400] : Colors.grey[600],
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                ),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                borderSide: BorderSide(
+                                  color: isDark ? Colors.blue[400]! : Colors.blue[600]!,
+                                  width: 2,
+                                ),
+                              ),
                               filled: true,
-                              fillColor: Colors.grey[50],
+                              fillColor: isDark ? Colors.grey[800] : Colors.grey[50],
                               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             ),
                           ),

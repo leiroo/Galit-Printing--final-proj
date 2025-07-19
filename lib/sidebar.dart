@@ -2,6 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'main.dart';
 
+// Notification Data Model
+class NotificationItem {
+  final String id;
+  final String title;
+  final String message;
+  final DateTime timestamp;
+  final NotificationType type;
+  final bool isRead;
+
+  NotificationItem({
+    required this.id,
+    required this.title,
+    required this.message,
+    required this.timestamp,
+    required this.type,
+    this.isRead = false,
+  });
+}
+
+enum NotificationType {
+  order,
+  payment,
+  inventory,
+  system,
+}
+
 // Profile Menu Component
 class ProfileMenu extends StatelessWidget {
   const ProfileMenu({super.key});
@@ -42,27 +68,382 @@ class ProfileMenu extends StatelessWidget {
     }
   }
 
+  void _showNotificationsDialog(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final deviceWidth = MediaQuery.of(context).size.width;
+    final isMobile = deviceWidth < 600;
+    
+    // Sample notifications data - in real app, this would come from a database
+    final notifications = [
+      NotificationItem(
+        id: '1',
+        title: 'New Order Received',
+        message: 'Order JO-2044401 from Maria Santos for banner printing (₱8,500)',
+        timestamp: DateTime.now().subtract(const Duration(minutes: 15)),
+        type: NotificationType.order,
+      ),
+      NotificationItem(
+        id: '2',
+        title: 'Low Stock Alert',
+        message: 'Vinyl Sticker Material is running low (8 meters remaining)',
+        timestamp: DateTime.now().subtract(const Duration(hours: 2)),
+        type: NotificationType.inventory,
+      ),
+      NotificationItem(
+        id: '3',
+        title: 'Payment Completed',
+        message: 'Payment received for Order JO-701050 (₱1,200) via GCash',
+        timestamp: DateTime.now().subtract(const Duration(hours: 3)),
+        type: NotificationType.payment,
+      ),
+      NotificationItem(
+        id: '4',
+        title: 'Order Status Update',
+        message: 'Order JO-799910 (Photo Printing) is now In Progress',
+        timestamp: DateTime.now().subtract(const Duration(hours: 5)),
+        type: NotificationType.order,
+      ),
+      NotificationItem(
+        id: '5',
+        title: 'System Maintenance',
+        message: 'Scheduled maintenance for printer #2 at 10:00 PM tonight',
+        timestamp: DateTime.now().subtract(const Duration(hours: 8)),
+        type: NotificationType.system,
+      ),
+    ];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Container(
+            width: isMobile ? deviceWidth * 0.95 : deviceWidth * 0.4,
+            constraints: BoxConstraints(
+              maxWidth: 500,
+              maxHeight: MediaQuery.of(context).size.height * 0.85,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Header
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.grey[800] : Colors.grey[50],
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.notifications,
+                        color: isDark ? Colors.blue[300] : Colors.blue[600],
+                        size: 24,
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Notifications',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).textTheme.titleLarge?.color,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${notifications.length}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: isDark ? Colors.grey[400] : Colors.grey[600],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.of(context).pop(),
+                        padding: EdgeInsets.zero,
+                        constraints: const BoxConstraints(),
+                      ),
+                    ],
+                  ),
+                ),
+                // Notifications List
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: notifications.length,
+                    itemBuilder: (context, index) {
+                      final notification = notifications[index];
+                      return _buildNotificationTile(context, notification, isDark);
+                    },
+                  ),
+                ),
+                // Footer
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: isDark ? Colors.grey[800] : Colors.grey[50],
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(16),
+                      bottomRight: Radius.circular(16),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton.icon(
+                        onPressed: () {
+                          // TODO: Mark all as read
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('All notifications marked as read')),
+                          );
+                        },
+                        icon: const Icon(Icons.done_all),
+                        label: const Text('Mark all as read'),
+                      ),
+                      TextButton.icon(
+                        onPressed: () {
+                          // TODO: Navigate to notifications page
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Notifications page coming soon!')),
+                          );
+                        },
+                        icon: const Icon(Icons.list),
+                        label: const Text('View all'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildNotificationTile(BuildContext context, NotificationItem notification, bool isDark) {
+    IconData iconData;
+    Color iconColor;
+    
+    switch (notification.type) {
+      case NotificationType.order:
+        iconData = Icons.shopping_cart;
+        iconColor = Colors.blue;
+        break;
+      case NotificationType.payment:
+        iconData = Icons.payment;
+        iconColor = Colors.green;
+        break;
+      case NotificationType.inventory:
+        iconData = Icons.inventory;
+        iconColor = Colors.orange;
+        break;
+      case NotificationType.system:
+        iconData = Icons.settings;
+        iconColor = Colors.purple;
+        break;
+    }
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: isDark ? Colors.grey[700]! : Colors.grey[200]!,
+            width: 1,
+          ),
+        ),
+      ),
+      child: ListTile(
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: iconColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            iconData,
+            color: iconColor,
+            size: 20,
+          ),
+        ),
+        title: Text(
+          notification.title,
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).textTheme.titleMedium?.color,
+          ),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 4),
+            Text(
+              notification.message,
+              style: TextStyle(
+                color: isDark ? Colors.grey[300] : Colors.grey[600],
+                fontSize: 13,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              _getTimeAgo(notification.timestamp),
+              style: TextStyle(
+                color: isDark ? Colors.grey[500] : Colors.grey[400],
+                fontSize: 11,
+              ),
+            ),
+          ],
+        ),
+        trailing: !notification.isRead
+            ? Container(
+                width: 8,
+                height: 8,
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle,
+                ),
+              )
+            : null,
+        onTap: () {
+          // TODO: Mark as read and handle notification action
+          Navigator.of(context).pop();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Handling notification: ${notification.title}'),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  String _getTimeAgo(DateTime timestamp) {
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+
+    if (difference.inMinutes < 1) {
+      return 'Just now';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h ago';
+    } else {
+      return '${difference.inDays}d ago';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isMobile = MediaQuery.of(context).size.width < 600;
     if (isMobile) {
-      return PopupMenuButton<String>(
-        icon: CircleAvatar(
-          radius: 20,
-          backgroundColor: Colors.deepPurple,
-          backgroundImage: const AssetImage('assets/logo.jpg'),
-          child: null,
-        ),
-        onSelected: (value) => _handleMenuSelection(context, value),
-        itemBuilder: (context) => [
-          PopupMenuItem(value: 'profile', child: ListTile(leading: const Icon(Icons.person), title: const Text('Your Profile'))),
-          PopupMenuItem(value: 'settings', child: ListTile(leading: const Icon(Icons.settings), title: const Text('Settings'))),
-          PopupMenuItem(value: 'logout', child: ListTile(leading: const Icon(Icons.logout), title: const Text('Logout'))),
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Notification Bell with Badge
+          Stack(
+            children: [
+              IconButton(
+                icon: Icon(
+                  Icons.notifications_outlined,
+                  color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[300] : Colors.grey[700],
+                  size: 28,
+                ),
+                onPressed: () => _showNotificationsDialog(context),
+              ),
+              // Red notification badge
+              Positioned(
+                right: 6,
+                top: 6,
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 20,
+                    minHeight: 20,
+                  ),
+                  child: const Text(
+                    '5',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(width: 8),
+          PopupMenuButton<String>(
+            icon: CircleAvatar(
+              radius: 20,
+              backgroundColor: Colors.deepPurple,
+              backgroundImage: const AssetImage('assets/logo.jpg'),
+              child: null,
+            ),
+            onSelected: (value) => _handleMenuSelection(context, value),
+            itemBuilder: (context) => [
+              PopupMenuItem(value: 'profile', child: ListTile(leading: const Icon(Icons.person), title: const Text('Your Profile'))),
+              PopupMenuItem(value: 'settings', child: ListTile(leading: const Icon(Icons.settings), title: const Text('Settings'))),
+              PopupMenuItem(value: 'logout', child: ListTile(leading: const Icon(Icons.logout), title: const Text('Logout'))),
+            ],
+          ),
         ],
       );
     }
     return Row(
       children: [
+        // Notification Bell with Badge
+        Stack(
+          children: [
+            IconButton(
+              icon: Icon(
+                Icons.notifications_outlined,
+                color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[300] : Colors.grey[700],
+                size: 28,
+              ),
+              onPressed: () => _showNotificationsDialog(context),
+            ),
+            // Red notification badge
+            Positioned(
+              right: 6,
+              top: 6,
+              child: Container(
+                padding: const EdgeInsets.all(3),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                constraints: const BoxConstraints(
+                  minWidth: 20,
+                  minHeight: 20,
+                ),
+                child: const Text(
+                  '5',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(width: 16),
         CircleAvatar(
           radius: 20,
           backgroundColor: Colors.deepPurple,

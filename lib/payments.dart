@@ -154,7 +154,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   ),
                   const SizedBox(height: 24),
                   Card(
-                    color: isDark ? Colors.grey[800] : const Color(0xFFF8FAFC),
+                    color: Theme.of(context).cardColor,
                     elevation: 0,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     child: Padding(
@@ -165,23 +165,39 @@ class _PaymentsPageState extends State<PaymentsPage> {
                                 // Search bar - full width
                                 TextField(
                                   controller: _searchController,
+                                  style: TextStyle(
+                                    color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                                  ),
                                   decoration: InputDecoration(
-                                    prefixIcon: const Icon(Icons.search),
+                                    prefixIcon: Icon(
+                                      Icons.search,
+                                      color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                    ),
                                     hintText: 'Search by receipt ID or order ID',
+                                    hintStyle: TextStyle(
+                                      color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                    ),
                                     filled: true,
-                                    fillColor: Colors.white,
+                                    fillColor: isDark ? Colors.grey[800] : Colors.white,
                                     contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(color: Colors.grey[300]!),
+                                      borderSide: BorderSide(
+                                        color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                      ),
                                     ),
                                     enabledBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: BorderSide(color: Colors.grey[300]!),
+                                      borderSide: BorderSide(
+                                        color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                      ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(8),
-                                      borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                      borderSide: BorderSide(
+                                        color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                        width: 2,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -207,19 +223,26 @@ class _PaymentsPageState extends State<PaymentsPage> {
                                         },
                                         decoration: InputDecoration(
                                           filled: true,
-                                          fillColor: Colors.white,
+                                          fillColor: isDark ? Colors.grey[800] : Colors.white,
                                           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                                           border: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(8),
-                                            borderSide: BorderSide(color: Colors.grey[300]!),
+                                            borderSide: BorderSide(
+                                              color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                            ),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(8),
-                                            borderSide: BorderSide(color: Colors.grey[300]!),
+                                            borderSide: BorderSide(
+                                              color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                            ),
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(8),
-                                            borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                            borderSide: BorderSide(
+                                              color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                              width: 2,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -242,19 +265,26 @@ class _PaymentsPageState extends State<PaymentsPage> {
                                         },
                                         decoration: InputDecoration(
                                           filled: true,
-                                          fillColor: Colors.white,
+                                          fillColor: isDark ? Colors.grey[800] : Colors.white,
                                           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                                           border: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(8),
-                                            borderSide: BorderSide(color: Colors.grey[300]!),
+                                            borderSide: BorderSide(
+                                              color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                            ),
                                           ),
                                           enabledBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(8),
-                                            borderSide: BorderSide(color: Colors.grey[300]!),
+                                            borderSide: BorderSide(
+                                              color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                            ),
                                           ),
                                           focusedBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(8),
-                                            borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                            borderSide: BorderSide(
+                                              color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                              width: 2,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -270,23 +300,39 @@ class _PaymentsPageState extends State<PaymentsPage> {
                                   flex: 2,
                                   child: TextField(
                                     controller: _searchController,
+                                    style: TextStyle(
+                                      color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                                    ),
                                     decoration: InputDecoration(
-                                      prefixIcon: const Icon(Icons.search),
+                                      prefixIcon: Icon(
+                                        Icons.search,
+                                        color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                      ),
                                       hintText: 'Search by receipt ID or order ID',
+                                      hintStyle: TextStyle(
+                                        color: isDark ? Colors.grey[400] : Colors.grey[600],
+                                      ),
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: isDark ? Colors.grey[800] : Colors.white,
                                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                        ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                        ),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                          width: 2,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -311,19 +357,26 @@ class _PaymentsPageState extends State<PaymentsPage> {
                                     },
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: isDark ? Colors.grey[800] : Colors.white,
                                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                        ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                        ),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                          width: 2,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -347,19 +400,26 @@ class _PaymentsPageState extends State<PaymentsPage> {
                                     },
                                     decoration: InputDecoration(
                                       filled: true,
-                                      fillColor: Colors.white,
+                                      fillColor: isDark ? Colors.grey[800] : Colors.white,
                                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                        ),
                                       ),
                                       enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: BorderSide(color: Colors.grey[300]!),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                                        ),
                                       ),
                                       focusedBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(color: Color(0xFF2563EB)),
+                                        borderSide: BorderSide(
+                                          color: isDark ? Colors.blue[400]! : const Color(0xFF2563EB),
+                                          width: 2,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -371,19 +431,34 @@ class _PaymentsPageState extends State<PaymentsPage> {
                   const SizedBox(height: 24),
                   Card(
                     elevation: 0,
-                    color: Colors.white,
+                    color: Theme.of(context).cardColor,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+                      side: BorderSide(
+                        color: isDark ? Colors.grey[800]! : const Color(0xFFE5E7EB), 
+                        width: 1
+                      ),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(24.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Payment Transactions', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+                          Text(
+                            'Payment Transactions', 
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold, 
+                              fontSize: 22,
+                              color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                            )
+                          ),
                           const SizedBox(height: 8),
-                          const Text('View and manage all payment records', style: TextStyle(color: Colors.grey)),
+                          Text(
+                            'View and manage all payment records', 
+                            style: TextStyle(
+                              color: isDark ? Colors.grey[400] : Colors.grey,
+                            )
+                          ),
                           const SizedBox(height: 16),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
@@ -484,68 +559,122 @@ class _PaymentsPageState extends State<PaymentsPage> {
 }
 
 Widget _summaryRow(String label, String value, {Color? color, bool bold = false}) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(label, style: TextStyle(color: color ?? Colors.black)),
-      Text(value, style: TextStyle(
-        color: color ?? Colors.black,
-        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
-        fontSize: bold ? 18 : 16,
-      )),
-    ],
+  return Builder(
+    builder: (context) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
+      final defaultColor = isDark ? Colors.white : Colors.black;
+      
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: TextStyle(color: color ?? defaultColor)),
+          Text(value, style: TextStyle(
+            color: color ?? defaultColor,
+            fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+            fontSize: bold ? 18 : 16,
+          )),
+        ],
+      );
+    }
   );
 }
 
 Widget _methodRow(IconData icon, String label, String amount, String percent, Color color, double progress) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Row(
+  return Builder(
+    builder: (context) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
+      
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(width: 8),
-          Text(label, style: TextStyle(fontWeight: FontWeight.w500)),
-          const Spacer(),
-          Text(amount, style: const TextStyle(fontWeight: FontWeight.bold)),
+          Row(
+            children: [
+              Icon(icon, color: color, size: 20),
+              const SizedBox(width: 8),
+              Text(
+                label, 
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                )
+              ),
+              const Spacer(),
+              Text(
+                amount, 
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                )
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          LinearProgressIndicator(
+            value: progress,
+            minHeight: 6,
+            backgroundColor: color.withOpacity(0.1),
+            valueColor: AlwaysStoppedAnimation<Color>(color),
+          ),
+          const SizedBox(height: 2),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              percent, 
+              style: TextStyle(
+                color: isDark ? Colors.grey[400] : Colors.grey[600], 
+                fontSize: 12
+              )
+            ),
+          ),
         ],
-      ),
-      const SizedBox(height: 4),
-      LinearProgressIndicator(
-        value: progress,
-        minHeight: 6,
-        backgroundColor: color.withOpacity(0.1),
-        valueColor: AlwaysStoppedAnimation<Color>(color),
-      ),
-      const SizedBox(height: 2),
-      Align(
-        alignment: Alignment.centerRight,
-        child: Text(percent, style: TextStyle(color: Colors.grey[600], fontSize: 12)),
-      ),
-    ],
+      );
+    }
   );
 }
 
 Widget _paymentSummaryCard() {
-  // Calculate totals from AppData
-  final totalAmount = AppData.payments.fold<double>(0, (sum, payment) => sum + payment.amount);
-  final completedPayments = AppData.payments.where((p) => p.status == 'Completed').fold<double>(0, (sum, payment) => sum + payment.amount);
-  final partialPayments = AppData.payments.where((p) => p.status == 'Partial').fold<double>(0, (sum, payment) => sum + payment.amount);
-  
-  return Card(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-    child: Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Icon(Icons.calendar_today_outlined, size: 24),
-              SizedBox(width: 8),
-              Text('Payment Summary', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-            ],
+  return Builder(
+    builder: (context) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
+      
+      // Calculate totals from AppData
+      final totalAmount = AppData.payments.fold<double>(0, (sum, payment) => sum + payment.amount);
+      final completedPayments = AppData.payments.where((p) => p.status == 'Completed').fold<double>(0, (sum, payment) => sum + payment.amount);
+      final partialPayments = AppData.payments.where((p) => p.status == 'Partial').fold<double>(0, (sum, payment) => sum + payment.amount);
+      
+      return Card(
+        color: Theme.of(context).cardColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: isDark ? Colors.grey[800]! : const Color(0xFFE5E7EB), 
+            width: 1
           ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.calendar_today_outlined, 
+                    size: 24,
+                    color: Theme.of(context).iconTheme.color ?? (isDark ? Colors.white : Colors.black87),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Payment Summary', 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, 
+                      fontSize: 20,
+                      color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                    )
+                  ),
+                ],
+              ),
           const SizedBox(height: 24),
           _summaryRow('Total Revenue', '₱${totalAmount.toStringAsFixed(0)}', bold: true),
           const SizedBox(height: 8),
@@ -556,46 +685,68 @@ Widget _paymentSummaryCard() {
           _summaryRow('Total Orders', '${AppData.orders.length}', color: Colors.blue),
           const SizedBox(height: 8),
           _summaryRow('Total Payments', '${AppData.payments.length}', color: Colors.purple),
-        ],
-      ),
-    ),
+            ],
+          ),
+        ),
+      );
+    }
   );
 }
 
 Widget _paymentMethodsCard() {
-  // Calculate payment method totals from AppData
-  final cashPayments = AppData.payments.where((p) => p.method == 'Cash').fold<double>(0, (sum, payment) => sum + payment.amount);
-  final gcashPayments = AppData.payments.where((p) => p.method == 'GCash').fold<double>(0, (sum, payment) => sum + payment.amount);
-  final totalAmount = AppData.payments.fold<double>(0, (sum, payment) => sum + payment.amount);
-  
-  final cashPercentage = totalAmount > 0 ? cashPayments / totalAmount : 0.0;
-  final gcashPercentage = totalAmount > 0 ? gcashPayments / totalAmount : 0.0;
-  
-  return Card(
-    color: Colors.white,
-    elevation: 0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-      side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: const [
-              Icon(Icons.credit_card, size: 24, color: Colors.black87),
-              SizedBox(width: 8),
-              Text('Payment Methods', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.black87)),
-            ],
+  return Builder(
+    builder: (context) {
+      final isDark = Theme.of(context).brightness == Brightness.dark;
+      
+      // Calculate payment method totals from AppData
+      final cashPayments = AppData.payments.where((p) => p.method == 'Cash').fold<double>(0, (sum, payment) => sum + payment.amount);
+      final gcashPayments = AppData.payments.where((p) => p.method == 'GCash').fold<double>(0, (sum, payment) => sum + payment.amount);
+      final totalAmount = AppData.payments.fold<double>(0, (sum, payment) => sum + payment.amount);
+      
+      final cashPercentage = totalAmount > 0 ? cashPayments / totalAmount : 0.0;
+      final gcashPercentage = totalAmount > 0 ? gcashPayments / totalAmount : 0.0;
+      
+      return Card(
+        color: Theme.of(context).cardColor,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: isDark ? Colors.grey[800]! : const Color(0xFFE5E7EB), 
+            width: 1
           ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.credit_card, 
+                    size: 24, 
+                    color: Theme.of(context).iconTheme.color ?? (isDark ? Colors.white : Colors.black87),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Payment Methods', 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold, 
+                      fontSize: 20, 
+                      color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                    )
+                  ),
+                ],
+              ),
           const SizedBox(height: 24),
           _methodRow(Icons.attach_money, 'Cash', '₱${cashPayments.toStringAsFixed(0)}', '${(cashPercentage * 100).toStringAsFixed(0)}% of total', Colors.green, cashPercentage),
           const SizedBox(height: 16),
           _methodRow(Icons.account_balance_wallet, 'GCash', '₱${gcashPayments.toStringAsFixed(0)}', '${(gcashPercentage * 100).toStringAsFixed(0)}% of total', Colors.blue, gcashPercentage),
-        ],
-      ),
-    ),
+            ],
+          ),
+        ),
+      );
+    }
   );
 } 

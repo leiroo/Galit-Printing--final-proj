@@ -77,7 +77,7 @@ class ThemeProvider extends ChangeNotifier {
         seedColor: const Color(0xFF3B82F6),
         brightness: Brightness.dark,
       ),
-      scaffoldBackgroundColor: const Color(0xFF0F172A),
+      scaffoldBackgroundColor: const Color(0xFF1E293B),
       cardColor: const Color(0xFF1E293B),
       appBarTheme: const AppBarTheme(
         backgroundColor: Color(0xFF1E293B),
@@ -152,7 +152,7 @@ class MyApp extends StatelessWidget {
           SystemChrome.setSystemUIOverlayStyle(
             themeProvider.isDarkMode
                 ? const SystemUiOverlayStyle(
-                    statusBarColor: Color(0xFF0F172A),
+                    statusBarColor: Color(0xFF1E293B),
                     statusBarIconBrightness: Brightness.light,
                     statusBarBrightness: Brightness.dark,
                   )

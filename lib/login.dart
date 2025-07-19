@@ -32,6 +32,7 @@ class _LoginScreenState extends State<LoginScreen>
     _tabController.addListener(() {
       setState(() {});
     });
+    // Removed default values for login fields
   }
   
   @override
@@ -55,7 +56,22 @@ class _LoginScreenState extends State<LoginScreen>
   // Handle login
   void _handleLogin() {
     if (_loginFormKey.currentState!.validate()) {
-      Navigator.pushReplacementNamed(context, '/dashboard');
+      final username = _loginUsernameController.text.trim();
+      final password = _loginPasswordController.text.trim();
+      
+      // Check if credentials match the default admin account
+      if (username == 'admin' && password == 'admin123') {
+        Navigator.pushReplacementNamed(context, '/dashboard');
+      } else {
+        // Show error message for invalid credentials
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invalid username or password.'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
     }
   }
   
@@ -227,56 +243,65 @@ class _LoginScreenState extends State<LoginScreen>
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Logo
-        Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: const Color(0xFF2563EB),
-            border: Border.all(
-              color: isDark ? const Color(0xFF1E293B) : Colors.white, 
-              width: 3
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
+        // Logo - Centered
+        Center(
+          child: Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(0xFF2563EB),
+              border: Border.all(
+                color: isDark ? const Color(0xFF1E293B) : Colors.white, 
+                width: 3
               ),
-            ],
-          ),
-          child: ClipOval(
-            child: Image.asset(
-              'assets/logo.jpg',
-              width: 74,
-              height: 74,
-              fit: BoxFit.cover,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                'assets/logo.jpg',
+                width: 74,
+                height: 74,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 16),
-        // Company name
-        Text(
-          'GALIT Digital Printing Services',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-            color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black),
+        const SizedBox(height: 20),
+        // Company name - Centered with better spacing
+        Center(
+          child: Text(
+            'GALIT Digital Printing Services',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black),
+              letterSpacing: 0.5,
+            ),
           ),
         ),
-        const SizedBox(height: 4),
-        // System description
-        Text(
-          'Job Order Management System',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-            color: isDark ? Colors.grey[400] : Colors.grey[600],
+        const SizedBox(height: 8),
+        // System description - Centered with better styling
+        Center(
+          child: Text(
+            'Job Order Management System',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: isDark ? Colors.grey[400] : Colors.grey[600],
+              letterSpacing: 0.3,
+            ),
           ),
         ),
       ],
@@ -611,43 +636,65 @@ class _LoginScreenState extends State<LoginScreen>
     bool obscureText = false,
     String? Function(String?)? validator,
   }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.grey[700],
-          ),
-        ),
-        const SizedBox(height: 6),
-        TextFormField(
-          controller: controller,
-          obscureText: obscureText,
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: Colors.grey[500],
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: isDark ? Colors.grey[300] : Colors.grey[700],
+              ),
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide.none,
+            const SizedBox(height: 6),
+            TextFormField(
+              controller: controller,
+              obscureText: obscureText,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+              ),
+              decoration: InputDecoration(
+                hintText: hintText,
+                hintStyle: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: isDark ? Colors.grey[400] : Colors.grey[500],
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(
+                    color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                  ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(
+                    color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: BorderSide(
+                    color: isDark ? Colors.blue[400]! : const Color(0xFF0B74E4),
+                    width: 2,
+                  ),
+                ),
+                filled: true,
+                fillColor: isDark ? Colors.grey[800] : const Color(0xFFF5F7FA),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              ),
+              validator: validator,
             ),
-            filled: true,
-            fillColor: const Color(0xFFF5F7FA),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-          ),
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w400,
-          ),
-          validator: validator,
-        ),
-      ],
+          ],
+        );
+      }
     );
   }
   

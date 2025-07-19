@@ -908,13 +908,18 @@ class _PopularServicesState extends State<PopularServices> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 16),
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+        side: BorderSide(
+          color: isDark ? Colors.grey[800]! : const Color(0xFFE5E7EB), 
+          width: 1
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -924,10 +929,17 @@ class _PopularServicesState extends State<PopularServices> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Popular Services', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black87)),
+                Text(
+                  'Popular Services', 
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold, 
+                    fontSize: 18, 
+                    color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black87)
+                  )
+                ),
                 DropdownButton<String>(
                   value: _selectedPeriod,
-                  items: const [
+                  items: [
                     DropdownMenuItem(value: 'This Month', child: Text('This Month')),
                     DropdownMenuItem(value: 'Last Month', child: Text('Last Month')),
                     DropdownMenuItem(value: 'This Year', child: Text('This Year')),
@@ -949,23 +961,38 @@ class _PopularServicesState extends State<PopularServices> {
   }
 
   Widget _buildService(Map service) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
           Icon(service['icon'], color: service['color']),
           const SizedBox(width: 12),
-          Expanded(child: Text(service['name'])),
+          Expanded(
+            child: Text(
+              service['name'],
+              style: TextStyle(
+                color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+              ),
+            )
+          ),
           SizedBox(
             width: 120,
             child: LinearProgressIndicator(
               value: (service['percent'] as int) / 100,
-              backgroundColor: Colors.grey[200],
+              backgroundColor: isDark ? Colors.grey[700] : Colors.grey[200],
               color: service['color'],
             ),
           ),
           const SizedBox(width: 12),
-          Text('${service['percent']}%', style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(
+            '${service['percent']}%', 
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+            )
+          ),
         ],
       ),
     );
@@ -978,13 +1005,31 @@ class AIInsightsPredictions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Card(
+      color: Theme.of(context).cardColor,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: isDark ? Colors.grey[800]! : const Color(0xFFE5E7EB), 
+          width: 1
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('AI Insights & Predictions', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+            Text(
+              'AI Insights & Predictions', 
+              style: TextStyle(
+                fontWeight: FontWeight.bold, 
+                fontSize: 18,
+                color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+              )
+            ),
             const SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -994,7 +1039,7 @@ class AIInsightsPredictions extends StatelessWidget {
                     icon: Icons.trending_up,
                     title: 'Sales Forecast',
                     desc: 'Based on current trends, expect a 15% increase in tarpaulin printing orders next month. Consider increasing inventory levels.',
-                    color: Colors.blue[50]!,
+                    color: isDark ? Colors.blue[900]! : Colors.blue[50]!,
                     iconColor: Colors.blue,
                   ),
                 ),
@@ -1004,7 +1049,7 @@ class AIInsightsPredictions extends StatelessWidget {
                     icon: Icons.lightbulb_outline,
                     title: 'Efficiency Opportunity',
                     desc: 'Bundling business cards with flyers could increase average order value by 22%. Consider creating a promotional package.',
-                    color: Colors.yellow[50]!,
+                    color: isDark ? Colors.yellow[900]! : Colors.yellow[50]!,
                     iconColor: Colors.amber,
                   ),
                 ),
@@ -1014,7 +1059,7 @@ class AIInsightsPredictions extends StatelessWidget {
                     icon: Icons.error_outline,
                     title: 'Potential Risk',
                     desc: 'Sticker production efficiency has dropped 8% in the last 2 weeks. Consider maintenance for the cutting machine.',
-                    color: Colors.red[50]!,
+                    color: isDark ? Colors.red[900]! : Colors.red[50]!,
                     iconColor: Colors.red,
                   ),
                 ),
@@ -1027,26 +1072,48 @@ class AIInsightsPredictions extends StatelessWidget {
   }
 
   static Widget _insightCard({required IconData icon, required String title, required String desc, required Color color, required Color iconColor}) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return Builder(
+      builder: (context) {
+        final isDark = Theme.of(context).brightness == Brightness.dark;
+        
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              color: isDark ? Colors.grey[700]! : Colors.grey[200]!,
+              width: 1,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, color: iconColor),
-              const SizedBox(width: 8),
-              Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+              Row(
+                children: [
+                  Icon(icon, color: iconColor),
+                  const SizedBox(width: 8),
+                  Text(
+                    title, 
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).textTheme.titleMedium?.color ?? (isDark ? Colors.white : Colors.black87),
+                    )
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                desc, 
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.grey[300] : Colors.grey[700]),
+                )
+              ),
             ],
           ),
-          const SizedBox(height: 8),
-          Text(desc, style: const TextStyle(fontSize: 13)),
-        ],
-      ),
+        );
+      }
     );
   }
 }
@@ -1068,19 +1135,31 @@ class _MonthlySalesChartState extends State<MonthlySalesChart> {
     final prevMonth = [35000.0, 30000.0, 17000.0, 12000.0, 15000.0];
     final currMonth = [42000.0, 43000.0, 20000.0, 15000.0, 17000.0];
     
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Card(
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: Color(0xFFE5E7EB), width: 1),
+        side: BorderSide(
+          color: isDark ? Colors.grey[800]! : const Color(0xFFE5E7EB), 
+          width: 1
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Monthly Sales by Service', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18, color: Colors.black87)),
+            Text(
+              'Monthly Sales by Service', 
+              style: TextStyle(
+                fontWeight: FontWeight.bold, 
+                fontSize: 18, 
+                color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black87)
+              )
+            ),
             const SizedBox(height: 16),
             SizedBox(
               height: 300,
@@ -1126,7 +1205,10 @@ class _MonthlySalesChartState extends State<MonthlySalesChart> {
                         getTitlesWidget: (value, meta) {
                           return Text(
                             '${(value / 1000).toInt()}K',
-                            style: const TextStyle(fontSize: 12),
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.grey[300] : Colors.grey[600]),
+                            ),
                           );
                         },
                       ),
@@ -1140,7 +1222,10 @@ class _MonthlySalesChartState extends State<MonthlySalesChart> {
                               padding: const EdgeInsets.only(top: 8.0),
                               child: Text(
                                 services[value.toInt()],
-                                style: const TextStyle(fontSize: 12),
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.grey[300] : Colors.grey[600]),
+                                ),
                                 textAlign: TextAlign.center,
                               ),
                             );
@@ -1158,7 +1243,7 @@ class _MonthlySalesChartState extends State<MonthlySalesChart> {
                     horizontalInterval: 10000,
                     getDrawingHorizontalLine: (value) {
                       return FlLine(
-                        color: Colors.grey.withOpacity(0.3),
+                        color: (isDark ? Colors.grey[600]! : Colors.grey).withOpacity(0.3),
                         strokeWidth: 1,
                       );
                     },
