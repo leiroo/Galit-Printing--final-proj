@@ -661,7 +661,7 @@ class _InventoryPageState extends State<InventoryPage> {
                   ],
                   const SizedBox(height: 16),
                   
-                  // Inventory Table
+                  // Inventory Table - Updated for full width
                   Card(
                     elevation: 0,
                     color: Theme.of(context).cardColor,
@@ -672,166 +672,295 @@ class _InventoryPageState extends State<InventoryPage> {
                         width: 1
                       ),
                     ),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        columnSpacing: isMobile ? 8 : 16,
-                        dataRowHeight: isMobile ? 60 : 52,
-                        headingRowHeight: isMobile ? 48 : 56,
-                        columns: [
-                          DataColumn(
-                            label: Text('ID', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
+                    child: Container(
+                      width: double.infinity, // Force the container to take full width
+                      child: Theme(
+                        data: Theme.of(context).copyWith(
+                          dataTableTheme: DataTableThemeData(
+                            columnSpacing: isMobile ? 8 : 24, // Increased column spacing for desktop
+                            dataRowMinHeight: isMobile ? 60 : 52,
+                            dataRowMaxHeight: isMobile ? 80 : 72,
+                            headingRowHeight: isMobile ? 48 : 56,
+                            horizontalMargin: 16,
                           ),
-                          DataColumn(
-                            label: Text('Item Name', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
-                          ),
-                          DataColumn(
-                            label: Text('Stock', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
-                          ),
-                          DataColumn(
-                            label: Text('Unit', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
-                          ),
-                          if (!isMobile) ...[
-                            DataColumn(
-                              label: Text('Reorder Level', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                        ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: MediaQuery.of(context).size.width - (isMobile ? 32 : 320), // Adjust based on sidebar width
                             ),
-                            DataColumn(
-                              label: Text('Unit Cost', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                            ),
-                            DataColumn(
-                              label: Text('Lead Time', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                            ),
-                          ],
-                          DataColumn(
-                            label: Text('Status', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
-                          ),
-                          DataColumn(
-                            label: Text('Actions', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
-                          ),
-                        ],
-                        rows: _filteredInventory.map((item) {
-                          final isLowStock = item['status'] == 'Low Stock';
-                          final stockColor = isLowStock ? Colors.red : Colors.black87;
-                          
-                          return DataRow(cells: [
-                            DataCell(Text(
-                              item['id'].toString(),
-                              style: TextStyle(fontSize: isMobile ? 12 : 14),
-                            )),
-                            DataCell(
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    item['name'],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: isMobile ? 12 : 14,
+                            child: DataTable(
+                              columns: [
+                                DataColumn(
+                                  label: SizedBox(
+                                    width: 40,
+                                    child: Text('ID', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: SizedBox(
+                                    width: isMobile ? 120 : 200, // Increased width for Item Name
+                                    child: Text('Item Name', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: SizedBox(
+                                    width: 80,
+                                    child: Text('Stock', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+                                DataColumn(
+                                  label: SizedBox(
+                                    width: 80,
+                                    child: Text('Unit', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+                                if (!isMobile) ...[
+                                  DataColumn(
+                                    label: SizedBox(
+                                      width: 100,
+                                      child: Text('Reorder Level', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                                     ),
                                   ),
-                                  if (!isMobile) Text(
-                                    item['description'],
-                                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                  DataColumn(
+                                    label: SizedBox(
+                                      width: 100,
+                                      child: Text('Unit Cost', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
-                            DataCell(
-                              Row(
-                                children: [
-                                  if (isLowStock) ...[
-                                    const Icon(Icons.warning, color: Colors.orange, size: 16),
-                                    const SizedBox(width: 4),
-                                  ],
-                                  Text(
-                                    item['stock'].toString(),
-                                    style: TextStyle(
-                                      color: stockColor,
-                                      fontWeight: isLowStock ? FontWeight.bold : FontWeight.normal,
-                                      fontSize: isMobile ? 12 : 14,
+                                  DataColumn(
+                                    label: SizedBox(
+                                      width: 100,
+                                      child: Text('Lead Time', style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                            DataCell(Text(
-                              item['unit'],
-                              style: TextStyle(fontSize: isMobile ? 12 : 14),
-                            )),
-                            if (!isMobile) ...[
-                              DataCell(Text(item['reorderLevel'].toString())),
-                              DataCell(Text('₱${item['unitCost'].toStringAsFixed(2)}')),
-                              DataCell(Text('${item['leadTime']} days')),
-                            ],
-                            DataCell(
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                decoration: BoxDecoration(
-                                  color: isLowStock ? Colors.orange.withOpacity(0.1) : Colors.green.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  item['status'],
-                                  style: TextStyle(
-                                    color: isLowStock ? Colors.orange : Colors.green,
-                                    fontSize: isMobile ? 10 : 12,
-                                    fontWeight: FontWeight.w500,
+                                DataColumn(
+                                  label: SizedBox(
+                                    width: 100,
+                                    child: Text('Status', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
                                   ),
                                 ),
-                              ),
-                            ),
-                                                          DataCell(
-                                Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.edit,
-                                        color: const Color(0xFF2563EB),
-                                        size: isMobile ? 18 : 24,
-                                      ),
-                                      onPressed: () => _showEditItemDialog(item),
-                                      tooltip: 'Edit',
-                                      padding: EdgeInsets.zero,
-                                      constraints: BoxConstraints(
-                                        minWidth: isMobile ? 32 : 40,
-                                        minHeight: isMobile ? 32 : 40,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.add_circle_outline,
-                                        color: const Color(0xFF2563EB),
-                                        size: isMobile ? 18 : 24,
-                                      ),
-                                      onPressed: () => _showStockAdjustmentDialog(item),
-                                      tooltip: 'Add/Subtract Stock',
-                                      padding: EdgeInsets.zero,
-                                      constraints: BoxConstraints(
-                                        minWidth: isMobile ? 32 : 40,
-                                        minHeight: isMobile ? 32 : 40,
+                                DataColumn(
+                                  label: SizedBox(
+                                    width: isMobile ? 120 : 140, // Increased width for Actions
+                                    child: Text('Actions', style: TextStyle(fontSize: isMobile ? 12 : 14, fontWeight: FontWeight.bold)),
+                                  ),
+                                ),
+                              ],
+                              rows: _filteredInventory.map((item) {
+                                final isLowStock = item['status'] == 'Low Stock';
+                                final stockColor = isLowStock ? Colors.red : Colors.black87;
+                                
+                                return DataRow(cells: [
+                                  DataCell(
+                                    SizedBox(
+                                      width: 40,
+                                      child: Text(
+                                        item['id'].toString(),
+                                        style: TextStyle(fontSize: isMobile ? 12 : 14),
                                       ),
                                     ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.delete,
-                                        color: Colors.red,
-                                        size: isMobile ? 18 : 24,
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: isMobile ? 120 : 200,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            item['name'],
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: isMobile ? 12 : 14,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          if (!isMobile) Text(
+                                            item['description'],
+                                            style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
                                       ),
-                                      onPressed: () => _showDeleteConfirmation(item),
-                                      tooltip: 'Delete',
-                                      padding: EdgeInsets.zero,
-                                      constraints: BoxConstraints(
-                                        minWidth: isMobile ? 32 : 40,
-                                        minHeight: isMobile ? 32 : 40,
+                                    ),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 80,
+                                      child: Row(
+                                        children: [
+                                          if (isLowStock) ...[
+                                            const Icon(Icons.warning, color: Colors.orange, size: 16),
+                                            const SizedBox(width: 4),
+                                          ],
+                                          Flexible(
+                                            child: Text(
+                                              item['stock'].toString(),
+                                              style: TextStyle(
+                                                color: isLowStock 
+                                                    ? Colors.red 
+                                                    : (Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87)),
+                                                fontWeight: isLowStock ? FontWeight.bold : FontWeight.normal,
+                                                fontSize: isMobile ? 12 : 14,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 80,
+                                      child: Text(
+                                        item['unit'],
+                                        style: TextStyle(fontSize: isMobile ? 12 : 14),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                  if (!isMobile) ...[
+                                    DataCell(
+                                      SizedBox(
+                                        width: 100,
+                                        child: Text(
+                                          item['reorderLevel'].toString(),
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    ),
+                                    DataCell(
+                                      SizedBox(
+                                        width: 100,
+                                        child: Text(
+                                          '₱${item['unitCost'].toStringAsFixed(2)}',
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                    ),
+                                    DataCell(
+                                      SizedBox(
+                                        width: 100,
+                                        child: Text(
+                                          '${item['leadTime']} days',
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
                                       ),
                                     ),
                                   ],
-                                ),
-                              ),
-                          ]);
-                        }).toList(),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 100,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                        decoration: BoxDecoration(
+                                          color: isLowStock ? Colors.red.withOpacity(0.1) : Colors.green.withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Text(
+                                          item['status'],
+                                          style: TextStyle(
+                                            color: isLowStock ? Colors.red : Colors.green,
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: isMobile ? 10 : 12,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: isMobile ? 120 : 140,
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          if (isMobile) ...[
+                                            PopupMenuButton<String>(
+                                              onSelected: (value) {
+                                                switch (value) {
+                                                  case 'edit':
+                                                    _showEditItemDialog(item);
+                                                    break;
+                                                  case 'adjust':
+                                                    _showStockAdjustmentDialog(item);
+                                                    break;
+                                                  case 'delete':
+                                                    _showDeleteConfirmation(item);
+                                                    break;
+                                                }
+                                              },
+                                              itemBuilder: (context) => [
+                                                const PopupMenuItem(
+                                                  value: 'edit',
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(Icons.edit, size: 16),
+                                                      SizedBox(width: 8),
+                                                      Text('Edit'),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const PopupMenuItem(
+                                                  value: 'adjust',
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(Icons.inventory, size: 16),
+                                                      SizedBox(width: 8),
+                                                      Text('Adjust Stock'),
+                                                    ],
+                                                  ),
+                                                ),
+                                                const PopupMenuItem(
+                                                  value: 'delete',
+                                                  child: Row(
+                                                    children: [
+                                                      Icon(Icons.delete, size: 16, color: Colors.red),
+                                                      SizedBox(width: 8),
+                                                      Text('Delete', style: TextStyle(color: Colors.red)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                              child: const Icon(Icons.more_vert, size: 18),
+                                            ),
+                                          ] else ...[
+                                            IconButton(
+                                              onPressed: () => _showEditItemDialog(item),
+                                              icon: const Icon(Icons.edit, size: 18),
+                                              padding: const EdgeInsets.all(4),
+                                              constraints: const BoxConstraints(),
+                                              tooltip: 'Edit Item',
+                                            ),
+                                            IconButton(
+                                              onPressed: () => _showStockAdjustmentDialog(item),
+                                              icon: const Icon(Icons.inventory, size: 18),
+                                              padding: const EdgeInsets.all(4),
+                                              constraints: const BoxConstraints(),
+                                              tooltip: 'Adjust Stock',
+                                            ),
+                                            IconButton(
+                                              onPressed: () => _showDeleteConfirmation(item),
+                                              icon: const Icon(Icons.delete, size: 18, color: Colors.red),
+                                              padding: const EdgeInsets.all(4),
+                                              constraints: const BoxConstraints(),
+                                              tooltip: 'Delete Item',
+                                            ),
+                                          ],
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ]);
+                              }).toList(),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -843,4 +972,4 @@ class _InventoryPageState extends State<InventoryPage> {
       ),
     );
   }
-} 
+}

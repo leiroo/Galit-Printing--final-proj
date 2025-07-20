@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:animations/animations.dart';
 import 'login.dart';
 import 'dashboard.dart';
 import 'job_orders.dart';
@@ -9,8 +10,13 @@ import 'payments.dart';
 import 'settings.dart';
 import 'reports.dart';
 import 'analytics.dart';
-import 'sidebar.dart';
-import 'package:fl_chart/fl_chart.dart';
+
+// Move color constants into a public class for cross-file access
+class AppColors {
+  static const brandBlue   = Color(0xFF2563EB);     // Galit primary
+  static const brandIndigo = Color(0xFF1D4ED8);     // darker stop
+  static const darkBar     = Color(0xFF111827);     // slate‑900
+}
 
 // Theme provider for managing light/dark mode
 class ThemeProvider extends ChangeNotifier {
@@ -32,6 +38,7 @@ class ThemeProvider extends ChangeNotifier {
   ThemeData get lightTheme {
     return ThemeData(
       brightness: Brightness.light,
+      fontFamily: 'Inter',
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xFF2563EB),
         brightness: Brightness.light,
@@ -39,15 +46,9 @@ class ThemeProvider extends ChangeNotifier {
       scaffoldBackgroundColor: const Color(0xFFF8FAFC),
       cardColor: Colors.white,
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black87,
+        backgroundColor: AppColors.brandBlue,   // fallback if gradient not used
+        foregroundColor: Colors.white,
         elevation: 0,
-        titleTextStyle: TextStyle(
-          color: Colors.black87,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        iconTheme: IconThemeData(color: Colors.black87),
       ),
       textTheme: const TextTheme(
         bodyLarge: TextStyle(color: Colors.black87),
@@ -59,11 +60,12 @@ class ThemeProvider extends ChangeNotifier {
       iconTheme: const IconThemeData(color: Colors.black87),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.android: FadeThroughPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeThroughPageTransitionsBuilder(),
           TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.linux: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeThroughPageTransitionsBuilder(),
+          TargetPlatform.fuchsia: FadeThroughPageTransitionsBuilder(),
         },
       ),
     );
@@ -73,22 +75,17 @@ class ThemeProvider extends ChangeNotifier {
   ThemeData get darkTheme {
     return ThemeData(
       brightness: Brightness.dark,
+      fontFamily: 'Inter',
       colorScheme: ColorScheme.fromSeed(
         seedColor: const Color(0xFF3B82F6),
         brightness: Brightness.dark,
       ),
-      scaffoldBackgroundColor: const Color(0xFF1E293B),
+      scaffoldBackgroundColor: const Color(0xFF0F172A),  // slate‑950
       cardColor: const Color(0xFF1E293B),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Color(0xFF1E293B),
+        backgroundColor: Color(0xFF102C57),
         foregroundColor: Colors.white,
         elevation: 0,
-        titleTextStyle: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-        iconTheme: IconThemeData(color: Colors.white),
       ),
       textTheme: const TextTheme(
         bodyLarge: TextStyle(color: Colors.white),
@@ -100,11 +97,12 @@ class ThemeProvider extends ChangeNotifier {
       iconTheme: const IconThemeData(color: Colors.white),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.android: FadeThroughPageTransitionsBuilder(),
           TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.windows: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.windows: FadeThroughPageTransitionsBuilder(),
           TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
-          TargetPlatform.linux: FadeUpwardsPageTransitionsBuilder(),
+          TargetPlatform.linux: FadeThroughPageTransitionsBuilder(),
+          TargetPlatform.fuchsia: FadeThroughPageTransitionsBuilder(),
         },
       ),
     );
@@ -186,16 +184,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

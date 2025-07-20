@@ -347,37 +347,42 @@ class ProfileMenu extends StatelessWidget {
       return Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Notification Bell with Badge
+          // Notification Bell with Badge - UPDATED with improved styling
           Stack(
             children: [
               IconButton(
                 icon: Icon(
                   Icons.notifications_outlined,
-                  color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[300] : Colors.grey[700],
+                  color: Colors.white, // FIXED: Always white in top bar context
                   size: 28,
                 ),
                 onPressed: () => _showNotificationsDialog(context),
               ),
-              // Red notification badge
+              // SMALLER red notification badge
               Positioned(
-                right: 6,
-                top: 6,
+                right: 8,  // Better positioning
+                top: 8,    // Better positioning
                 child: Container(
-                  padding: const EdgeInsets.all(3),
+                  padding: const EdgeInsets.all(2), // Smaller padding
                   decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(12),
+                    color: const Color(0xFFDC2626), // Consistent red color
+                    borderRadius: BorderRadius.circular(8), // Smaller radius
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 1,
+                    ),
                   ),
                   constraints: const BoxConstraints(
-                    minWidth: 20,
-                    minHeight: 20,
+                    minWidth: 16, // Smaller
+                    minHeight: 16, // Smaller
                   ),
                   child: const Text(
                     '5',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 10, // Smaller font
+                      fontWeight: FontWeight.w600,
+                      height: 1.0,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -405,37 +410,42 @@ class ProfileMenu extends StatelessWidget {
     }
     return Row(
       children: [
-        // Notification Bell with Badge
+        // Notification Bell with Badge - UPDATED with improved styling
         Stack(
           children: [
             IconButton(
               icon: Icon(
                 Icons.notifications_outlined,
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[300] : Colors.grey[700],
+                color: Colors.white, // FIXED: Always white in top bar context
                 size: 28,
               ),
               onPressed: () => _showNotificationsDialog(context),
             ),
-            // Red notification badge
+            // SMALLER red notification badge
             Positioned(
-              right: 6,
-              top: 6,
+              right: 8,  // Better positioning
+              top: 8,    // Better positioning
               child: Container(
-                padding: const EdgeInsets.all(3),
+                padding: const EdgeInsets.all(2), // Smaller padding
                 decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(12),
+                  color: const Color(0xFFDC2626), // Consistent red color
+                  borderRadius: BorderRadius.circular(8), // Smaller radius
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 1,
+                  ),
                 ),
                 constraints: const BoxConstraints(
-                  minWidth: 20,
-                  minHeight: 20,
+                  minWidth: 16, // Smaller
+                  minHeight: 16, // Smaller
                 ),
                 child: const Text(
                   '5',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 10, // Smaller font
+                    fontWeight: FontWeight.w600,
+                    height: 1.0,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -451,24 +461,31 @@ class ProfileMenu extends StatelessWidget {
           child: null,
         ),
         const SizedBox(width: 8),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'System Administrator', 
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).textTheme.titleMedium?.color,
-              )
-            ),
-            Text(
-              'Administrator', 
-              style: TextStyle(
-                fontSize: 12, 
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[400] : Colors.grey
-              )
-            ),
-          ],
+        // Fixed text alignment to center vertically with avatar
+        IntrinsicHeight(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(
+                'System Administrator', 
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  height: 1.2,
+                )
+              ),
+              SizedBox(height: 1), // Small gap between texts
+              Text(
+                'Administrator', 
+                style: TextStyle(
+                  fontSize: 12, 
+                  color: Colors.white70,
+                  height: 1.2,
+                )
+              ),
+            ],
+          ),
         ),
         const SizedBox(width: 8),
         PopupMenuButton<String>(
@@ -551,15 +568,17 @@ class Sidebar extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                         fontSize: 16,
                         color: Theme.of(context).textTheme.titleLarge?.color,
+                        height: 1.2,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
                     Text(
                       'Job Order Management System',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).brightness == Brightness.dark ? Colors.grey[400] : Colors.grey,
+                        height: 1.2,
                       ),
                     ),
                     const SizedBox(height: 20),
@@ -747,4 +766,4 @@ class _SidebarItem extends StatelessWidget {
       ),
     );
   }
-} 
+}

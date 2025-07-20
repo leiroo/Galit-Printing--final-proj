@@ -1377,11 +1377,7 @@ class _RevenueTrendsChartState extends State<RevenueTrendsChart> {
             const SizedBox(height: 16),
             SizedBox(
               height: 220,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width < 600 ? 800 : 700,
-                  child: LineChart(
+              child: LineChart(
                 LineChartData(
                   gridData: FlGridData(
                     show: true,
@@ -1500,8 +1496,6 @@ class _RevenueTrendsChartState extends State<RevenueTrendsChart> {
                     ),
                   ],
                 ),
-                  ),
-                ),
               ),
             ),
           ],
@@ -1512,20 +1506,29 @@ class _RevenueTrendsChartState extends State<RevenueTrendsChart> {
 }
 
 // Service Breakdown Chart Component
-class ServiceBreakdownChart extends StatelessWidget {
+class ServiceBreakdownChart extends StatefulWidget {
   const ServiceBreakdownChart({super.key});
+
+  @override
+  State<ServiceBreakdownChart> createState() => _ServiceBreakdownChartState();
+}
+
+class _ServiceBreakdownChartState extends State<ServiceBreakdownChart> {
+  int? touchedIndex;
+  PieTouchResponse? pieTouchResponse;
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     
     final data = [
-      {'label': 'Tarpaulin', 'value': 35.0, 'color': Colors.blue},
-      {'label': 'Business Cards', 'value': 25.0, 'color': Colors.lightBlue},
-      {'label': 'Stickers', 'value': 20.0, 'color': Colors.amber},
-      {'label': 'Flyers', 'value': 15.0, 'color': Colors.pinkAccent},
-      {'label': 'Other', 'value': 5.0, 'color': Colors.green},
+      {'label': 'Tarpaulin', 'value': 35.0, 'color': Colors.blue, 'amount': '₱84,000'},
+      {'label': 'Business Cards', 'value': 25.0, 'color': Colors.lightBlue, 'amount': '₱60,000'},
+      {'label': 'Stickers', 'value': 20.0, 'color': Colors.amber, 'amount': '₱48,000'},
+      {'label': 'Flyers', 'value': 15.0, 'color': Colors.pinkAccent, 'amount': '₱36,000'},
+      {'label': 'Other', 'value': 5.0, 'color': Colors.green, 'amount': '₱12,000'},
     ];
+    
     return Card(
       color: Theme.of(context).cardColor,
       elevation: 0,
@@ -1554,16 +1557,41 @@ class ServiceBreakdownChart extends StatelessWidget {
               height: 300,
               child: PieChart(
                 PieChartData(
-                  sections: data.map((d) {
+                  pieTouchData: PieTouchData(
+                    enabled: true,
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (event.isInterestedForInteractions &&
+                            pieTouchResponse != null &&
+                            pieTouchResponse.touchedSection != null) {
+                          touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                        } else {
+                          touchedIndex = null;
+                        }
+                      });
+                    },
+                  ),
+                  sections: data.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final d = entry.value;
+                    final isTouched = index == touchedIndex;
+                    
                     return PieChartSectionData(
                       color: d['color'] as Color,
                       value: d['value'] as double,
-                      title: '',
-                      radius: 100,
+                      title: isTouched ? '${(d['value'] as double).toInt()}%' : '',
+                      titleStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        shadows: const [Shadow(color: Colors.black, blurRadius: 2)],
+                      ),
+                      radius: isTouched ? 110 : 100,
+                      titlePositionPercentageOffset: 0.5,
                     );
                   }).toList(),
                   sectionsSpace: 2,
-                  centerSpaceRadius: 0,
+                  centerSpaceRadius: 40,
                 ),
               ),
             ),
@@ -1571,23 +1599,91 @@ class ServiceBreakdownChart extends StatelessWidget {
             Wrap(
               spacing: 16,
               runSpacing: 8,
-              children: data.map((d) {
-                return Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(width: 12, height: 12, color: d['color'] as Color),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${d['label']} ${(d['value'] as double?)?.toInt() ?? 0}%', 
-                      style: TextStyle(
-                        color: isDark ? Colors.grey[300] : Colors.grey[700],
-                        fontSize: 14,
-                      )
-                    ),
-                  ],
+              children: data.asMap().entries.map((entry) {
+                final index = entry.key;
+                final d = entry.value;
+                final isTouched = index == touchedIndex;
+                
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isTouched ? (d['color'] as Color).withOpacity(0.1) : Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
+                    border: isTouched ? Border.all(color: d['color'] as Color, width: 1) : null,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 12, 
+                        height: 12, 
+                        decoration: BoxDecoration(
+                          color: d['color'] as Color,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${d['label']} ${(d['value'] as double?)?.toInt() ?? 0}%', 
+                            style: TextStyle(
+                              color: isDark ? Colors.grey[300] : Colors.grey[700],
+                              fontSize: 14,
+                              fontWeight: isTouched ? FontWeight.bold : FontWeight.normal,
+                            )
+                          ),
+                          if (isTouched)
+                            Text(
+                              d['amount'] as String,
+                              style: TextStyle(
+                                color: d['color'] as Color,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
                 );
               }).toList(),
             ),
+            if (touchedIndex != null && touchedIndex! >= 0 && touchedIndex! < data.length) ...[
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: (data[touchedIndex!]['color'] as Color).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: data[touchedIndex!]['color'] as Color,
+                    width: 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: data[touchedIndex!]['color'] as Color,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        '${data[touchedIndex!]['label']} represents ${data[touchedIndex!]['value']}% of total revenue (${data[touchedIndex!]['amount']})',
+                        style: TextStyle(
+                          color: Theme.of(context).textTheme.bodyMedium?.color ?? (isDark ? Colors.white : Colors.black87),
+                          fontSize: 14,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ],
         ),
       ),

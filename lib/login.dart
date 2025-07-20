@@ -32,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen>
     _tabController.addListener(() {
       setState(() {});
     });
-    // Removed default values for login fields
   }
   
   @override
@@ -90,8 +89,6 @@ class _LoginScreenState extends State<LoginScreen>
   
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: LayoutBuilder(
@@ -130,12 +127,12 @@ class _LoginScreenState extends State<LoginScreen>
                     width: double.infinity,
                     margin: const EdgeInsets.all(16),
                     child: Card(
-                      elevation: 2,
-                      color: Theme.of(context).cardColor,
+                      elevation: isDark ? 8 : 2,
+                      color: isDark ? const Color(0xFF1E293B) : Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide(
-                          color: isDark ? Colors.grey[800]! : Colors.grey[300]!,
+                          color: isDark ? const Color(0xFF334155) : Colors.grey[300]!,
                           width: 1,
                         ),
                       ),
@@ -198,12 +195,12 @@ class _LoginScreenState extends State<LoginScreen>
                     constraints: const BoxConstraints(maxWidth: 420),
                     margin: const EdgeInsets.all(24),
                     child: Card(
-                      elevation: 2,
-                      color: Theme.of(context).cardColor,
+                      elevation: isDark ? 8 : 2,
+                      color: isDark ? const Color(0xFF1E293B) : Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                         side: BorderSide(
-                          color: isDark ? Colors.grey[800]! : Colors.grey[300]!,
+                          color: isDark ? const Color(0xFF334155) : Colors.grey[300]!,
                           width: 1,
                         ),
                       ),
@@ -255,12 +252,12 @@ class _LoginScreenState extends State<LoginScreen>
               shape: BoxShape.circle,
               color: const Color(0xFF2563EB),
               border: Border.all(
-                color: isDark ? const Color(0xFF1E293B) : Colors.white, 
+                color: isDark ? const Color(0xFF334155) : Colors.white, 
                 width: 3
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: (isDark ? Colors.black : Colors.grey).withOpacity(0.3),
                   blurRadius: 8,
                   offset: const Offset(0, 2),
                 ),
@@ -285,7 +282,7 @@ class _LoginScreenState extends State<LoginScreen>
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
-              color: Theme.of(context).textTheme.titleLarge?.color ?? (isDark ? Colors.white : Colors.black),
+              color: isDark ? Colors.white : Colors.black,
               letterSpacing: 0.5,
             ),
           ),
@@ -299,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen>
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
-              color: isDark ? Colors.grey[400] : Colors.grey[600],
+              color: isDark ? const Color(0xFF94A3B8) : Colors.grey[600],
               letterSpacing: 0.3,
             ),
           ),
@@ -315,7 +312,7 @@ class _LoginScreenState extends State<LoginScreen>
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: isDark ? Colors.grey[800] : Colors.grey[100],
+        color: isDark ? const Color(0xFF334155) : Colors.grey[100],
       ),
       child: TabBar(
         controller: _tabController,
@@ -324,7 +321,7 @@ class _LoginScreenState extends State<LoginScreen>
           Tab(text: 'Register'),
         ],
         labelColor: Colors.white,
-        unselectedLabelColor: isDark ? Colors.grey[400] : Colors.grey[700],
+        unselectedLabelColor: isDark ? const Color(0xFF94A3B8) : Colors.grey[700],
         indicator: BoxDecoration(
           color: const Color(0xFF2196F3),
           borderRadius: BorderRadius.circular(8),
@@ -370,8 +367,10 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
   
-  // Build marketing panel without separate scrolling
+  // Build marketing panel with theme-aware colors
   Widget _buildMarketingPanel(bool isMobile) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Container(
       width: double.infinity,
       constraints: isMobile 
@@ -379,22 +378,29 @@ class _LoginScreenState extends State<LoginScreen>
           : BoxConstraints(
               minHeight: MediaQuery.of(context).size.height,
             ),
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF2196F3),
-            Color(0xFF00417A),
-          ],
+          colors: isDark 
+              ? [
+                  const Color(0xFF0F172A), // Very dark slate
+                  const Color(0xFF1E293B), // Dark slate
+                ]
+              : [
+                  const Color(0xFF2196F3), // Light blue
+                  const Color(0xFF1565C0), // Darker blue
+                ],
         ),
       ),
       child: _buildMarketingContent(),
     );
   }
   
-  // Marketing content widget - Fixed to prevent overflow
+  // Marketing content widget with theme-aware styling
   Widget _buildMarketingContent() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.all(32),
@@ -402,12 +408,12 @@ class _LoginScreenState extends State<LoginScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Galit Digital Printing Services',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: isDark ? const Color(0xFFE2E8F0) : Colors.white,
               ),
             ),
             const SizedBox(height: 16),
@@ -416,7 +422,9 @@ class _LoginScreenState extends State<LoginScreen>
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w400,
-                color: Colors.white.withOpacity(0.8),
+                color: isDark 
+                    ? const Color(0xFF94A3B8) 
+                    : Colors.white.withOpacity(0.9),
                 height: 1.5,
               ),
             ),
@@ -446,18 +454,20 @@ class _LoginScreenState extends State<LoginScreen>
   
   // Build login form
   Widget _buildLoginForm() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Column(
       key: const ValueKey('login'),
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Welcome heading
-        const Text(
+        Text(
           'Welcome Back',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: isDark ? Colors.white : Colors.black,
           ),
         ),
         const SizedBox(height: 8),
@@ -466,7 +476,7 @@ class _LoginScreenState extends State<LoginScreen>
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            color: Colors.grey[600],
+            color: isDark ? const Color(0xFF94A3B8) : Colors.grey[600],
           ),
         ),
         const SizedBox(height: 32),
@@ -521,18 +531,20 @@ class _LoginScreenState extends State<LoginScreen>
   
   // Build register form
   Widget _buildRegisterForm() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Column(
       key: const ValueKey('register'),
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Create account heading
-        const Text(
+        Text(
           'Create an account',
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.w700,
-            color: Colors.black,
+            color: isDark ? Colors.white : Colors.black,
           ),
         ),
         const SizedBox(height: 4),
@@ -541,7 +553,7 @@ class _LoginScreenState extends State<LoginScreen>
           style: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            color: Colors.grey[600],
+            color: isDark ? const Color(0xFF94A3B8) : Colors.grey[600],
           ),
         ),
         const SizedBox(height: 16),
@@ -648,7 +660,7 @@ class _LoginScreenState extends State<LoginScreen>
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: isDark ? Colors.grey[300] : Colors.grey[700],
+                color: isDark ? const Color(0xFFE2E8F0) : Colors.grey[700],
               ),
             ),
             const SizedBox(height: 6),
@@ -658,36 +670,50 @@ class _LoginScreenState extends State<LoginScreen>
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: Theme.of(context).textTheme.bodyLarge?.color ?? (isDark ? Colors.white : Colors.black87),
+                color: isDark ? Colors.white : Colors.black87,
               ),
               decoration: InputDecoration(
                 hintText: hintText,
                 hintStyle: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: isDark ? Colors.grey[400] : Colors.grey[500],
+                  color: isDark ? const Color(0xFF64748B) : Colors.grey[500],
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
                   borderSide: BorderSide(
-                    color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                    color: isDark ? const Color(0xFF475569) : Colors.grey[300]!,
                   ),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
                   borderSide: BorderSide(
-                    color: isDark ? Colors.grey[600]! : Colors.grey[300]!,
+                    color: isDark ? const Color(0xFF475569) : Colors.grey[300]!,
                   ),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(6),
                   borderSide: BorderSide(
-                    color: isDark ? Colors.blue[400]! : const Color(0xFF0B74E4),
+                    color: isDark ? const Color(0xFF3B82F6) : const Color(0xFF0B74E4),
+                    width: 2,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: const BorderSide(
+                    color: Colors.red,
+                    width: 1,
+                  ),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(6),
+                  borderSide: const BorderSide(
+                    color: Colors.red,
                     width: 2,
                   ),
                 ),
                 filled: true,
-                fillColor: isDark ? Colors.grey[800] : const Color(0xFFF5F7FA),
+                fillColor: isDark ? const Color(0xFF374151) : const Color(0xFFF8FAFC),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
               validator: validator,
@@ -709,7 +735,7 @@ class _LoginScreenState extends State<LoginScreen>
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF0B74E4),
+          backgroundColor: const Color(0xFF2196F3),
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(6),
@@ -719,9 +745,12 @@ class _LoginScreenState extends State<LoginScreen>
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
             (Set<MaterialState> states) {
               if (states.contains(MaterialState.hovered)) {
+                return const Color(0xFF1976D2);
+              }
+              if (states.contains(MaterialState.pressed)) {
                 return const Color(0xFF1565C0);
               }
-              return const Color(0xFF0B74E4);
+              return const Color(0xFF2196F3);
             },
           ),
         ),
@@ -736,19 +765,25 @@ class _LoginScreenState extends State<LoginScreen>
     );
   }
   
-  // Build feature tile
+  // Build feature tile with theme-aware styling
   Widget _buildFeatureTile({
     required IconData icon,
     required String title,
     required String subtitle,
   }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: isDark 
+            ? const Color(0xFF374151).withOpacity(0.3) 
+            : Colors.white.withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: Colors.white.withOpacity(0.2),
+          color: isDark 
+              ? const Color(0xFF4B5563).withOpacity(0.5)
+              : Colors.white.withOpacity(0.2),
           width: 1,
         ),
       ),
@@ -757,13 +792,15 @@ class _LoginScreenState extends State<LoginScreen>
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: isDark 
+                  ? const Color(0xFF4B5563).withOpacity(0.4)
+                  : Colors.white.withOpacity(0.2),
               borderRadius: BorderRadius.circular(6),
             ),
             child: Icon(
               icon,
               size: 20,
-              color: Colors.white,
+              color: isDark ? const Color(0xFF60A5FA) : Colors.white,
             ),
           ),
           const SizedBox(width: 16),
@@ -773,10 +810,10 @@ class _LoginScreenState extends State<LoginScreen>
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.white,
+                    color: isDark ? const Color(0xFFE2E8F0) : Colors.white,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -785,7 +822,9 @@ class _LoginScreenState extends State<LoginScreen>
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
-                    color: Colors.white.withOpacity(0.8),
+                    color: isDark 
+                        ? const Color(0xFF94A3B8) 
+                        : Colors.white.withOpacity(0.9),
                     height: 1.4,
                   ),
                 ),
